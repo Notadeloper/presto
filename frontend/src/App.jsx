@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Login } from './pages/login.jsx'
-import { Register } from './pages/register.jsx'
-import { Dashboard } from './pages/dashboard.jsx'
+import { Login } from './pages/login.jsx';
+import { Register } from './pages/register.jsx';
+import { Dashboard } from './pages/dashboard.jsx';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App () {
   let lsToken = null;
