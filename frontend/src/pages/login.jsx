@@ -29,6 +29,7 @@ export function Login ({ token, setTokenFunction }) {
 
   return (
     <div className="this-is-a-div-wrapper">
+      {/* This does the submit on enter */}
       <Form onSubmit={(e) => {
         e.preventDefault();
         login();
