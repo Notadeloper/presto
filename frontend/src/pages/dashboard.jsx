@@ -8,7 +8,6 @@ import { PresentationList } from '../components/presentationList';
 import { v4 as uuidv4 } from 'uuid';
 
 export function Dashboard ({ token, setTokenFunction }) {
-  // Load in presentations
   const [store, setStore] = React.useState({});
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [presentations, setPresentations] = React.useState([]);
@@ -65,6 +64,11 @@ export function Dashboard ({ token, setTokenFunction }) {
     <NewPresentationButton onClick={toggleModal} />
     {isModalVisible && <NewPresentationModal onSubmit={addNewPresentation} onClose={toggleModal} />}
     <PresentationList presentations={presentations} />
+    <ul>
+      {presentations.map(presentation => (
+        <li key={presentation.id}>{presentation.name}</li> // Display each user's name
+      ))}
+      </ul>
   </>;
 }
 
