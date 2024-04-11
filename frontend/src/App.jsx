@@ -7,7 +7,7 @@ import { Dashboard } from './pages/dashboard.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App () {
-  /* const updateStore = async () => {
+  const updateStore = async () => {
     try {
       const response = await axios.get('http://localhost:5005/store', {
         headers: {
@@ -28,7 +28,7 @@ function App () {
     } catch (err) {
       alert(err);
     }
-  } */
+  }
 
   let lsToken = null;
   if (localStorage.getItem('token')) {
