@@ -7,40 +7,68 @@ import { NewPresentationModal } from '../components/newPresentationModal';
 import { PresentationList } from '../components/presentationList';
 import { v4 as uuidv4 } from 'uuid';
 
+const updateStore = async () => {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await axios.get('http://localhost:5005/store', {
+      headers: {
+        Authorization: token,
+      }
+    });
+    const currentStore = response.data.store;
+    if (!currentStore.presentations) {
+      currentStore.presentations = {};
+    }
+    await axios.put('http://localhost:5005/store', { store: currentStore }, {
+      headers: {
+        Authorization: token,
+      }
+    });
+  } catch (err) {
+    alert(err.response.data.error);
+  }
+}
+
+const fetchData = async (setPresentations) => {
+  const token = localStorage.getItem('token');
+  await updateStore();
+  try {
+    const response = await axios.get('http://localhost:5005/store', {
+      headers: {
+        Authorization: token,
+      }
+    });
+    setPresentations([]);
+    const currentPresentations = response.data.store.presentations;
+    const presentationKeys = Object.keys(currentPresentations);
+    presentationKeys.reverse();
+
+    for (const key of presentationKeys) {
+      setPresentations(presentations => [...presentations, currentPresentations[key]]);
+    }
+  } catch (err) {
+    alert(err.response.data.error);
+  }
+}
+
 export function Dashboard ({ token, setTokenFunction }) {
-  const [store, setStore] = React.useState({});
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [presentations, setPresentations] = React.useState([]);
+  React.useEffect(() => {
+    fetchData(setPresentations);
+  }, []);
+  // const [store, setStore] = React.useState({});
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
 
-  React.useEffect(() => {
-    // Placeholder for fetching presentations data
-  }, []);
-
-  const addNewPresentation = (presentationName) => {
-    const newPresentation = {
-      id: uuidv4(), // Random Unique ID generator
-      name: presentationName,
-      slides: [{}] // Starting with a single empty slide
-    };
-    setPresentations([...presentations, newPresentation]);
-    toggleModal(); // Hide the modal after adding
-    axios.put('http://localhost:5005/store', { store: newPresentation }, {
-      headers: {
-        Authorization: token,
-      }
-    }).then(response => {
-      console.log(newPresentation);
-    }).catch((error) => {
-      console.error(error);
-      // Optionally revert the optimistic UI update or notify the user
-    });
+  const openModal = () => {
+    setIsModalVisible(true);
   };
+
   // axiosget is called everytime [] changes but also runs once at the start
-  React.useEffect(() => {
+  /* React.useEffect(() => {
     axios.get('http://localhost:5005/store', {
       headers: {
         Authorization: token,
@@ -53,7 +81,39 @@ export function Dashboard ({ token, setTokenFunction }) {
       alert(error);
     });
   }, []);
-  console.log(store);
+  console.log(store); */
+
+  const addNewPresentation = async (presentationName) => {
+    const newPresentation = {
+      id: uuidv4(), // Random Unique ID generator
+      name: presentationName,
+      thumbnail: null,
+      description: null,
+      slides: [{}] // Starting with a single empty slide
+    };
+
+    setPresentations(presentations => [newPresentation, ...presentations]);
+    toggleModal(); // Hide the modal after adding
+
+    try {
+      const response = await axios.get('http://localhost:5005/store', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      const currentStore = response.data.store;
+      const currentPresentations = currentStore.presentations;
+      currentPresentations[newPresentation.id] = newPresentation;
+
+      await axios.put('http://localhost:5005/store', { store: currentStore }, {
+        headers: {
+          Authorization: token,
+        }
+      });
+    } catch (err) {
+      alert(err.response.data.error);
+    }
+  };
 
   if (token === null) {
     return <Navigate to="/login" />
@@ -61,14 +121,9 @@ export function Dashboard ({ token, setTokenFunction }) {
   return <>
     <h1>Dashboard</h1>
     <LogoutButton token={token} setToken={setTokenFunction}/> <br />
-    <NewPresentationButton onClick={toggleModal} />
+    <NewPresentationButton onClick={openModal} />
     {isModalVisible && <NewPresentationModal onSubmit={addNewPresentation} onClose={toggleModal} />}
     <PresentationList presentations={presentations} />
-    <ul>
-      {presentations.map(presentation => (
-        <li key={presentation.id}>{presentation.name}</li> // Display each user's name
-      ))}
-      </ul>
   </>;
 }
 
