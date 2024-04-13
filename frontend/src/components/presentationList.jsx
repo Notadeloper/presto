@@ -20,7 +20,7 @@ export function PresentationList ({ presentations }) {
           <CardActionArea sx={{ height: '100%' }} onClick={() => handlePresentationClick(presentation.id)}>
             <CardContent sx={{ flexGrow: 1 }}>
               <Typography variant="h5" component="div" sx={{ wordWrap: 'break-word' }}>
-                {presentation.name}
+                {presentation.title}
               </Typography>
               <Typography variant="body2">
                 {presentation.slides.length}

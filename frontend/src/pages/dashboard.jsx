@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { LogoutButton } from '../components/logoutButton.jsx';
 import { NewPresentationButton } from '../components/newPresentationButton';
 import { NewPresentationModal } from '../components/newPresentationModal';
@@ -52,8 +52,13 @@ const fetchData = async (setPresentations) => {
 }
 
 export function Dashboard ({ token, setTokenFunction }) {
+  if (token === null) {
+    return <Navigate to="/login" />
+  }
+
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [presentations, setPresentations] = React.useState([]);
+  const navigate = useNavigate();
   React.useEffect(() => {
     fetchData(setPresentations);
   }, []);
@@ -86,7 +91,7 @@ export function Dashboard ({ token, setTokenFunction }) {
   const addNewPresentation = async (presentationName) => {
     const newPresentation = {
       id: uuidv4(), // Random Unique ID generator
-      name: presentationName,
+      title: presentationName,
       thumbnail: null,
       description: null,
       slides: [{}] // Starting with a single empty slide
@@ -110,14 +115,13 @@ export function Dashboard ({ token, setTokenFunction }) {
           Authorization: token,
         }
       });
+      navigate(`/presentations/${newPresentation.id}`);
     } catch (err) {
+      console.log(err);
       alert(err.response.data.error);
     }
   };
 
-  if (token === null) {
-    return <Navigate to="/login" />
-  }
   return <>
     <h1>Dashboard</h1>
     <LogoutButton token={token} setToken={setTokenFunction}/> <br />
