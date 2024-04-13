@@ -21,3 +21,7 @@
     cursor: pointer;
 }
 
+.slide-card {
+    width: calc(100vw - 50px);
+    margin: auto;
+}
