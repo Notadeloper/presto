@@ -1,9 +1,11 @@
 import React from 'react';
-import { Button, TextField, Box, Typography, Modal } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 import { modalStyle } from '../styles/style.jsx';
 
-export function EditTitleModal ({ onSubmit, onClose, presentationId }) {
-  const [presentationTitle, setPresentationTitle] = React.useState('');
+export function DeletePresentationModal ({ onSubmit, onClose, presentationId }) {
   const [open, setOpen] = React.useState(true);
 
   const handleClose = () => {
@@ -13,7 +15,7 @@ export function EditTitleModal ({ onSubmit, onClose, presentationId }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(presentationId, presentationTitle);
+    onSubmit(presentationId);
     handleClose();
   };
 
@@ -21,23 +23,13 @@ export function EditTitleModal ({ onSubmit, onClose, presentationId }) {
     <Modal open={open} onClose={handleClose}>
       <Box sx={modalStyle} component="form" onSubmit={handleSubmit}>
         <Typography id="modal-title" variant="h6" component="h2">
-          Enter New Presentation Title
+          Are you sure you want to delete this presentation? This action cannot be undone.
         </Typography>
-        <TextField
-          fullWidth
-          margin="normal"
-          id="presentation-title"
-          label="Presentation Title"
-          type="text"
-          value={presentationTitle}
-          onChange={(e) => setPresentationTitle(e.target.value)}
-          variant="outlined"
-        />
         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <Button type="submit">Save Changes</Button>
+          <Button type="submit">Delete</Button>
           <Button onClick={handleClose}>Cancel</Button>
         </Box>
       </Box>
     </Modal>
-  )
+  );
 }

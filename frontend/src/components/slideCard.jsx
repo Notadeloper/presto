@@ -4,21 +4,17 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { slideCardStyle } from '../styles/style.jsx';
 
-export function SlideCard ({ presentation }) {
+export function SlideCard ({ slide }) {
+  if (!slide) {
+    return <div>Loading slides...</div>;
+  }
   return (
-    <Card className="slide-card">
+    <Card sx={slideCardStyle}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          ..
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          adjective
-        </Typography>
-        <Typography variant="body2">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
+          {slide.id}
         </Typography>
       </CardContent>
       <CardActions>

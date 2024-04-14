@@ -1,9 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import '../styles/style.css'
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Button, TextField, Box, Typography } from '@mui/material';
+import { thisIsADivWrapperStyle } from '../styles/style';
 
 export function Login ({ token, setTokenFunction }) {
   const [email, setEmail] = React.useState('');
@@ -11,7 +10,7 @@ export function Login ({ token, setTokenFunction }) {
   const navigate = useNavigate();
 
   if (token !== null) {
-    return <Navigate to="/dashboard" />
+    navigate('/dashboard');
   }
 
   const login = async () => {
@@ -28,34 +27,36 @@ export function Login ({ token, setTokenFunction }) {
   }
 
   return (
-    <div className="this-is-a-div-wrapper">
-      {/* This does the submit on enter */}
-      <Form onSubmit={(e) => {
-        e.preventDefault();
-        login();
-      }}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            value = {email}
-            onChange={e => setEmail(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            value = {password}
-            onChange={e => setPassword(e.target.value)}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-    </div>
+    <Box sx={thisIsADivWrapperStyle} component="form" onSubmit={(e) => {
+      e.preventDefault();
+      login();
+    }}>
+      <Typography variant="h6" component="h1" marginBottom={2}>
+        Login
+      </Typography>
+      <TextField
+        fullWidth
+        margin="normal"
+        label="Email Address"
+        type="email"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        variant="outlined"
+        required
+      />
+      <TextField
+        fullWidth
+        margin="normal"
+        label="Password"
+        type="password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        variant="outlined"
+        required
+      />
+      <Button variant="contained" color="primary" type="submit" sx={{ mt: 3 }}>
+        Submit
+      </Button>
+    </Box>
   );
 }
