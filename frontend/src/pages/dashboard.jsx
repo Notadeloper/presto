@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { LogoutButton } from '../components/logoutButton.jsx';
 import { NewPresentationButton } from '../components/newPresentationButton';
 import { NewPresentationModal } from '../components/newPresentationModal';
@@ -52,53 +52,37 @@ const fetchData = async (setPresentations) => {
 }
 
 export function Dashboard ({ token, setTokenFunction }) {
+  const navigate = useNavigate();
   if (token === null) {
-    return <Navigate to="/login" />
+    navigate('/login');
   }
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [presentations, setPresentations] = React.useState([]);
-  const navigate = useNavigate();
   React.useEffect(() => {
     fetchData(setPresentations);
   }, []);
-  // const [store, setStore] = React.useState({});
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
 
-  const openModal = () => {
-    setIsModalVisible(true);
-  };
-
-  // axiosget is called everytime [] changes but also runs once at the start
-  /* React.useEffect(() => {
-    axios.get('http://localhost:5005/store', {
-      headers: {
-        Authorization: token,
-      }
-    }).then((response) => {
-      console.log(response);
-      setStore(response.data.store);
-    }).catch((error) => {
-      console.log(error);
-      alert(error);
-    });
-  }, []);
-  console.log(store); */
-
-  const addNewPresentation = async (presentationName) => {
+  const addNewPresentation = async (presentationTitle) => {
     const newPresentation = {
-      id: uuidv4(), // Random Unique ID generator
-      title: presentationName,
+      id: uuidv4(),
+      title: presentationTitle,
       thumbnail: null,
       description: null,
-      slides: [{}] // Starting with a single empty slide
+      slides: [
+        {
+          id: uuidv4(),
+          elements: null,
+        }
+      ]
     };
 
     setPresentations(presentations => [newPresentation, ...presentations]);
-    toggleModal(); // Hide the modal after adding
+    toggleModal();
 
     try {
       const response = await axios.get('http://localhost:5005/store', {
@@ -125,7 +109,7 @@ export function Dashboard ({ token, setTokenFunction }) {
   return <>
     <h1>Dashboard</h1>
     <LogoutButton token={token} setToken={setTokenFunction}/> <br />
-    <NewPresentationButton onClick={openModal} />
+    <NewPresentationButton onClick={toggleModal} />
     {isModalVisible && <NewPresentationModal onSubmit={addNewPresentation} onClose={toggleModal} />}
     <PresentationList presentations={presentations} />
   </>;

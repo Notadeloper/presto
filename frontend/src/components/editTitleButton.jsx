@@ -2,9 +2,9 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 
-export function EditTitleButton ({ presentation }) {
+export function EditTitleButton ({ onClick }) {
   return (
-    <Button variant="contained" endIcon={<EditIcon />}>
+    <Button onClick={onClick} variant="contained" endIcon={<EditIcon />}>
       Edit Title
     </Button>
   )
