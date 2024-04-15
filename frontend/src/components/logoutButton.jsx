@@ -15,6 +15,7 @@ export function LogoutButton ({ token, setToken }) {
       });
       setToken(null);
       localStorage.removeItem('token');
+      localStorage.removeItem('currentPresentationId');
       navigate('/login');
     } catch (err) {
       alert(err.response.data.error);
