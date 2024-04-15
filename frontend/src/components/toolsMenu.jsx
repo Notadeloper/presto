@@ -11,25 +11,39 @@ import TextFieldsIcon from '@mui/icons-material/TextFields';
 import ImageIcon from '@mui/icons-material/Image';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import CodeIcon from '@mui/icons-material/Code';
+import { AddTextModal } from '../components/addTextModal.jsx';
+import { AddCodeModal } from '../components/addCodeModal.jsx';
+import { AddVideoModal } from '../components/addVideoModal.jsx';
+import { AddImageModal } from '../components/addImageModal.jsx';
 
 export function ToolsMenu () {
   const [open, setOpen] = React.useState(false);
+  const [modalState, setModalState] = React.useState({
+    text: false,
+    image: false,
+    video: false,
+    code: false
+  });
 
-  const toggleDrawer = (newOpen) => () => {
+  const toggleToolbox = (newOpen) => () => {
     setOpen(newOpen);
   };
 
-  const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+  const toggleModal = (type) => {
+    setModalState(prev => ({ ...prev, [type]: !prev[type] }));
+  };
+
+  const ToolboxList = (
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleToolbox(false)}>
       <List>
         {[
-          { text: 'Add Text', icon: <TextFieldsIcon /> },
-          { text: 'Add Image', icon: <ImageIcon /> },
-          { text: 'Add Video', icon: <OndemandVideoIcon /> },
-          { text: 'Add Code', icon: <CodeIcon /> }
+          { text: 'Add Text', icon: <TextFieldsIcon />, tool: 'Text' },
+          { text: 'Add Image', icon: <ImageIcon />, tool: 'Image' },
+          { text: 'Add Video', icon: <OndemandVideoIcon />, tool: 'Video' },
+          { text: 'Add Code', icon: <CodeIcon />, tool: 'Code' }
         ].map((item) => (
           <ListItem key={item.text} disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => toggleModal(item.tool.toLowerCase())}>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>
@@ -39,12 +53,32 @@ export function ToolsMenu () {
     </Box>
   );
 
+  const addNewText = async (newTextElement) => {
+    console.log(newTextElement);
+  }
+
+  const addNewImage = async () => {
+
+  }
+
+  const addNewVideo = async () => {
+
+  }
+
+  const addNewCode = async () => {
+
+  }
+
   return (
     <div>
-      <Button onClick={toggleDrawer(true)}>Open drawer</Button>
-      <Drawer open={open} onClose={toggleDrawer(false)}>
-        {DrawerList}
+      <Button onClick={toggleToolbox(true)}>Open Toolbox</Button>
+      <Drawer open={open} onClose={toggleToolbox(false)}>
+        {ToolboxList}
       </Drawer>
+      {modalState.text && <AddTextModal onSubmit={addNewText} onClose={() => toggleModal('text')} />}
+      {modalState.image && <AddImageModal onSubmit={addNewImage} onClose={() => toggleModal('image')} />}
+      {modalState.video && <AddVideoModal open={addNewVideo} onClose={() => toggleModal('video')} />}
+      {modalState.code && <AddCodeModal open={addNewCode} onClose={() => toggleModal('code')} />}
     </div>
   );
 }

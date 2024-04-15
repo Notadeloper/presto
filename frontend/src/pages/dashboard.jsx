@@ -76,7 +76,7 @@ export function Dashboard ({ token, setTokenFunction }) {
       slides: [
         {
           id: uuidv4(),
-          elements: null,
+          elements: {},
         }
       ]
     };

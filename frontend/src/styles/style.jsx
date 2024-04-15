@@ -24,6 +24,7 @@ export const presentationCardStyle = {
 
 export const slideCardStyle = {
   width: 'calc(100vw - 50px)',
+  height: 'calc(100vh / 2)',
   margin: 'auto'
 };
 
