@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -16,7 +17,7 @@ import { AddCodeModal } from '../components/addCodeModal.jsx';
 import { AddVideoModal } from '../components/addVideoModal.jsx';
 import { AddImageModal } from '../components/addImageModal.jsx';
 
-export function ToolsMenu () {
+export function ToolsMenu ({ slide, setSlide }) {
   const [open, setOpen] = React.useState(false);
   const [modalState, setModalState] = React.useState({
     text: false,
@@ -54,7 +55,33 @@ export function ToolsMenu () {
   );
 
   const addNewText = async (newTextElement) => {
-    console.log(newTextElement);
+    const token = localStorage.getItem('token');
+    const presentationId = localStorage.getItem('currentPresentationId');
+    try {
+      const response = await axios.get('http://localhost:5005/store', {
+        headers: {
+          Authorization: token,
+        }
+      });
+
+      const currentStore = response.data.store;
+      const currentPresentation = currentStore.presentations[presentationId];
+      const currentSlide = currentPresentation.slides.find(s => s.id === slide.id);
+      currentSlide.elements.push(newTextElement);
+      const updatedSlide = {
+        ...slide,
+        elements: [...slide.elements, newTextElement]
+      };
+      setSlide(updatedSlide);
+      await axios.put('http://localhost:5005/store', { store: currentStore }, {
+        headers: {
+          Authorization: token,
+        }
+      });
+    } catch (err) {
+      console.log(err);
+      alert(err);
+    }
   }
 
   const addNewImage = async () => {
@@ -77,8 +104,8 @@ export function ToolsMenu () {
       </Drawer>
       {modalState.text && <AddTextModal onSubmit={addNewText} onClose={() => toggleModal('text')} />}
       {modalState.image && <AddImageModal onSubmit={addNewImage} onClose={() => toggleModal('image')} />}
-      {modalState.video && <AddVideoModal open={addNewVideo} onClose={() => toggleModal('video')} />}
-      {modalState.code && <AddCodeModal open={addNewCode} onClose={() => toggleModal('code')} />}
+      {modalState.video && <AddVideoModal onSubmit={addNewVideo} onClose={() => toggleModal('video')} />}
+      {modalState.code && <AddCodeModal onSubmit={addNewCode} onClose={() => toggleModal('code')} />}
     </div>
   );
 }

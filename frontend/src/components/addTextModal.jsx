@@ -9,21 +9,33 @@ export function AddTextModal ({ onSubmit, onClose }) {
   const [textContent, setTextContent] = React.useState('');
   const [open, setOpen] = React.useState(true);
 
+  const isValidHexColor = (hex) => {
+    return /^#?([0-9A-F]{3}){1,2}$/i.test(hex);
+  }
   const handleClose = () => {
     setOpen(false);
     onClose();
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Stops default submitting of form
     const newTextElement = {
+      elementType: 'text',
       textSize,
       fontSize,
       textColor,
       textContent,
+      textPosition: {
+        x: 0,
+        y: 0
+      }
     };
-    onSubmit(newTextElement);
-    handleClose();
+    if (Number(textSize.width) > 0 && Number(textSize.height) > 0 && Number(fontSize) > 0 && isValidHexColor(textColor)) {
+      onSubmit(newTextElement);
+      handleClose();
+    } else {
+      alert('Please re-enter valid inputs');
+    }
   };
 
   return (
@@ -36,23 +48,27 @@ export function AddTextModal ({ onSubmit, onClose }) {
           fullWidth
           margin="normal"
           id="text-size-height"
-          label="Text Area Height (px)"
+          label="Text Area Height (%)"
           type="number"
           value={textSize.height}
           onChange={(e) => setTextSize({ ...textSize, height: e.target.value })}
           variant="outlined"
-          InputProps={{ endAdornment: 'px' }}
+          InputProps={{ endAdornment: '%', inputProps: { min: 0, max: 100 } }}
+          helperText="Enter a value from 0 to 100, where 100 is the full height."
+          required
         />
         <TextField
           fullWidth
           margin="normal"
           id="text-size-width"
-          label="Text Area Width (px)"
+          label="Text Area Width (%)"
           type="number"
           value={textSize.width}
           onChange={(e) => setTextSize({ ...textSize, width: e.target.value })}
           variant="outlined"
-          InputProps={{ endAdornment: 'px' }}
+          InputProps={{ endAdornment: '%', inputProps: { min: 0, max: 100 } }}
+          helperText="Enter a value from 0 to 100, where 100 is the full width."
+          required
         />
         <TextField
           fullWidth
@@ -64,17 +80,19 @@ export function AddTextModal ({ onSubmit, onClose }) {
           onChange={(e) => setFontSize(e.target.value)}
           variant="outlined"
           InputProps={{ endAdornment: 'em' }}
+          required
         />
         <TextField
           fullWidth
           margin="normal"
           id="text-color"
-          label="Text Color"
+          label="Text Color (Hex Code)"
           type="text"
           value={textColor}
           onChange={(e) => setTextColor(e.target.value)}
           variant="outlined"
           InputProps={{ startAdornment: '#' }}
+          required
         />
         <TextField
           fullWidth
@@ -87,6 +105,7 @@ export function AddTextModal ({ onSubmit, onClose }) {
           variant="outlined"
           multiline
           rows={5}
+          required
         />
         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
           <Button type="submit">Create</Button>

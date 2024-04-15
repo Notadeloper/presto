@@ -23,6 +23,8 @@ export function Presentation ({ token, setTokenFunction }) {
   const [isModalDeletePresVisible, setIsModalDeletePresVisible] = React.useState(false);
   const [isModalEditTitleVisible, setIsModalEditTitleVisible] = React.useState(false);
 
+  localStorage.setItem('currentPresentationId', presentationId);
+
   React.useEffect(() => {
     const fetchPresentation = async () => {
       try {
@@ -120,7 +122,7 @@ export function Presentation ({ token, setTokenFunction }) {
   const createNewSlide = async (presentationId) => {
     const newSlide = {
       id: uuidv4(),
-      elements: null,
+      elements: []
     }
     try {
       const response = await axios.get('http://localhost:5005/store', {
@@ -171,7 +173,7 @@ export function Presentation ({ token, setTokenFunction }) {
       <DeletePresentationButton onClick={toggleModalDeletePres}/>
       <EditTitleButton onClick={toggleModalEditTitle}/>
       <NewSlideButton onClick={createNewSlide} presentationId={presentationId}/>
-      <ToolsMenu/>
+      <ToolsMenu slide={slide} setSlide={setSlide}/>
       <SlideCard slide={slide}/>
       {isModalDeletePresVisible && <DeletePresentationModal onSubmit={deletePresentation} onClose={toggleModalDeletePres} presentationId={presentationId} />}
       {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} />}
