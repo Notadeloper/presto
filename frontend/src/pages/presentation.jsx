@@ -11,6 +11,7 @@ import { EditTitleModal } from '../components/editTitleModal.jsx';
 import { NewSlideButton } from '../components/newSlideButton.jsx';
 import { SlideLeftButton } from '../components/slideLeftButton.jsx';
 import { SlideRightButton } from '../components/slideRightButton.jsx';
+import { ToolsMenu } from '../components/toolsMenu.jsx';
 import { v4 as uuidv4 } from 'uuid';
 
 export function Presentation ({ token, setTokenFunction }) {
@@ -18,6 +19,7 @@ export function Presentation ({ token, setTokenFunction }) {
   const navigate = useNavigate();
   const [presentation, setPresentation] = React.useState(null);
   const [slide, setSlide] = React.useState(null);
+  const [slideIndex, setSlideIndex] = React.useState(0);
   const [isModalDeletePresVisible, setIsModalDeletePresVisible] = React.useState(false);
   const [isModalEditTitleVisible, setIsModalEditTitleVisible] = React.useState(false);
 
@@ -31,7 +33,7 @@ export function Presentation ({ token, setTokenFunction }) {
         });
         const fetchedPresentation = response.data.store.presentations[presentationId];
         setPresentation(fetchedPresentation);
-        setSlide(fetchedPresentation.slides[0]);
+        setSlide(fetchedPresentation.slides[slideIndex]);
       } catch (err) {
         alert(err);
       }
@@ -40,6 +42,25 @@ export function Presentation ({ token, setTokenFunction }) {
       fetchPresentation();
     }
   }, [presentationId]);
+
+  React.useEffect(() => {
+    if (presentation?.slides?.length > slideIndex) {
+      setSlide(presentation.slides[slideIndex]);
+      console.log('Updated slide index to:', slideIndex);
+    }
+    const handleKeyDown = (event) => {
+      if (event.key === 'ArrowLeft') {
+        doSlideLeft();
+      } else if (event.key === 'ArrowRight') {
+        doSlideRight();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [slideIndex, presentation]);
 
   const toggleModalDeletePres = () => {
     setIsModalDeletePresVisible(!isModalDeletePresVisible);
@@ -116,10 +137,25 @@ export function Presentation ({ token, setTokenFunction }) {
           Authorization: token,
         }
       });
-      // might need to update UI
+      setPresentation(prev => ({
+        ...prev,
+        slides: currentPresentations[presentationId].slides
+      }));
     } catch (err) {
       alert(err);
       console.log(err);
+    }
+  }
+
+  const doSlideLeft = () => {
+    if (slideIndex > 0) {
+      setSlideIndex(slideIndex - 1);
+    }
+  }
+
+  const doSlideRight = () => {
+    if (slideIndex < presentation.slides.length - 1) {
+      setSlideIndex(slideIndex + 1);
     }
   }
 
@@ -135,11 +171,12 @@ export function Presentation ({ token, setTokenFunction }) {
       <DeletePresentationButton onClick={toggleModalDeletePres}/>
       <EditTitleButton onClick={toggleModalEditTitle}/>
       <NewSlideButton onClick={createNewSlide} presentationId={presentationId}/>
+      <ToolsMenu/>
       <SlideCard slide={slide}/>
       {isModalDeletePresVisible && <DeletePresentationModal onSubmit={deletePresentation} onClose={toggleModalDeletePres} presentationId={presentationId} />}
       {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} />}
-      <SlideLeftButton/>
-      <SlideRightButton/>
+      {slideIndex > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
+      {slideIndex < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}
     </>
   )
 }
