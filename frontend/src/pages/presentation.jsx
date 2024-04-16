@@ -11,7 +11,6 @@ import { EditTitleModal } from '../components/editTitleModal.jsx';
 import { NewSlideButton } from '../components/newSlideButton.jsx';
 import { SlideLeftButton } from '../components/slideLeftButton.jsx';
 import { SlideRightButton } from '../components/slideRightButton.jsx';
-import { ViewPreviewButton } from '../components/viewPreviewButton.jsx';
 import { ToolsMenu } from '../components/toolsMenu.jsx';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -150,102 +149,16 @@ export function Presentation ({ token, setTokenFunction }) {
     }
   }
 
-  const doSlideLeft = async () => {
+  const doSlideLeft = () => {
     if (slideIndex > 0) {
-      const currentSlideIndex = slideIndex;
       setSlideIndex(slideIndex - 1);
-      try {
-        const response = await axios.get('http://localhost:5005/store', {
-          headers: {
-            Authorization: token,
-          }
-        });
-        const currentStore = response.data.store;
-        const currentPresentations = currentStore.presentations;
-        console.log(currentPresentations[presentationId].slides[currentSlideIndex - 1]);
-        setSlide(currentPresentations[presentationId].slides[currentSlideIndex - 1]);
-      } catch (err) {
-        alert(err);
-        console.log(err);
-      }
     }
   }
 
-  const doSlideRight = async () => {
+  const doSlideRight = () => {
     if (slideIndex < presentation.slides.length - 1) {
-      const currentSlideIndex = slideIndex;
       setSlideIndex(slideIndex + 1);
-      try {
-        const response = await axios.get('http://localhost:5005/store', {
-          headers: {
-            Authorization: token,
-          }
-        });
-        const currentStore = response.data.store;
-        const currentPresentations = currentStore.presentations;
-        console.log(currentPresentations[presentationId].slides[currentSlideIndex + 1]);
-        setSlide(currentPresentations[presentationId].slides[currentSlideIndex + 1]);
-      } catch (err) {
-        alert(err);
-        console.log(err);
-      }
     }
-  }
-
-  const deleteElement = async (elementIndex, slide) => {
-    try {
-      const response = await axios.get('http://localhost:5005/store', {
-        headers: {
-          Authorization: token,
-        }
-      });
-      const currentStore = response.data.store;
-      const currentPresentations = currentStore.presentations;
-      const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
-      currentSlide.elements = currentSlide.elements.filter((_, index) => index !== elementIndex);
-      await axios.put('http://localhost:5005/store', { store: currentStore }, {
-        headers: {
-          Authorization: token,
-        }
-      });
-      setSlide(currentSlide);
-    } catch (err) {
-      alert(err);
-      console.log(err);
-    }
-  }
-
-  const updateElementContent = async (elementIndex, slide, updatedContent) => {
-    try {
-      const response = await axios.get('http://localhost:5005/store', {
-        headers: {
-          Authorization: token,
-        }
-      });
-      const currentStore = response.data.store;
-      const currentPresentations = currentStore.presentations;
-      const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
-      const currentElement = currentSlide.elements[elementIndex];
-      currentElement.elementContent = updatedContent;
-      await axios.put('http://localhost:5005/store', { store: currentStore }, {
-        headers: {
-          Authorization: token,
-        }
-      });
-      setSlide(currentSlide);
-    } catch (err) {
-      alert(err);
-      console.log(err);
-    }
-  }
-
-  const updateTextFont = async () => {
-
-  }
-
-  const openPreview = () => {
-    const previewUrl = window.location.origin + '/presentations' + `/${presentationId}` + '/preview';
-    window.open(previewUrl, '_blank');
   }
 
   if (!presentation) {
@@ -260,9 +173,8 @@ export function Presentation ({ token, setTokenFunction }) {
       <DeletePresentationButton onClick={toggleModalDeletePres}/>
       <EditTitleButton onClick={toggleModalEditTitle}/>
       <NewSlideButton onClick={createNewSlide} presentationId={presentationId}/>
-      <ViewPreviewButton onClick={openPreview}/>
       <ToolsMenu slide={slide} setSlide={setSlide}/>
-      <SlideCard slide={slide} deleteElement={deleteElement} updateElementContent={updateElementContent} updateTextFont={updateTextFont}/>
+      <SlideCard slide={slide}/>
       {isModalDeletePresVisible && <DeletePresentationModal onSubmit={deletePresentation} onClose={toggleModalDeletePres} presentationId={presentationId} />}
       {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} />}
       {slideIndex > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
