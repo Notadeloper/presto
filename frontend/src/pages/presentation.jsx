@@ -149,15 +149,68 @@ export function Presentation ({ token, setTokenFunction }) {
     }
   }
 
-  const doSlideLeft = () => {
+  const doSlideLeft = async () => {
     if (slideIndex > 0) {
+      const currentSlideIndex = slideIndex;
       setSlideIndex(slideIndex - 1);
+      try {
+        const response = await axios.get('http://localhost:5005/store', {
+          headers: {
+            Authorization: token,
+          }
+        });
+        const currentStore = response.data.store;
+        const currentPresentations = currentStore.presentations;
+        console.log(currentPresentations[presentationId].slides[currentSlideIndex - 1]);
+        setSlide(currentPresentations[presentationId].slides[currentSlideIndex - 1]);
+      } catch (err) {
+        alert(err);
+        console.log(err);
+      }
     }
   }
 
-  const doSlideRight = () => {
+  const doSlideRight = async () => {
     if (slideIndex < presentation.slides.length - 1) {
+      const currentSlideIndex = slideIndex;
       setSlideIndex(slideIndex + 1);
+      try {
+        const response = await axios.get('http://localhost:5005/store', {
+          headers: {
+            Authorization: token,
+          }
+        });
+        const currentStore = response.data.store;
+        const currentPresentations = currentStore.presentations;
+        console.log(currentPresentations[presentationId].slides[currentSlideIndex + 1]);
+        setSlide(currentPresentations[presentationId].slides[currentSlideIndex + 1]);
+      } catch (err) {
+        alert(err);
+        console.log(err);
+      }
+    }
+  }
+
+  const deleteElement = async (elementIndex, slide) => {
+    try {
+      const response = await axios.get('http://localhost:5005/store', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      const currentStore = response.data.store;
+      const currentPresentations = currentStore.presentations;
+      const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
+      currentSlide.elements = currentSlide.elements.filter((_, index) => index !== elementIndex);
+      await axios.put('http://localhost:5005/store', { store: currentStore }, {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setSlide(currentSlide);
+    } catch (err) {
+      alert(err);
+      console.log(err);
     }
   }
 
@@ -174,7 +227,7 @@ export function Presentation ({ token, setTokenFunction }) {
       <EditTitleButton onClick={toggleModalEditTitle}/>
       <NewSlideButton onClick={createNewSlide} presentationId={presentationId}/>
       <ToolsMenu slide={slide} setSlide={setSlide}/>
-      <SlideCard slide={slide}/>
+      <SlideCard slide={slide} deleteElement={deleteElement}/>
       {isModalDeletePresVisible && <DeletePresentationModal onSubmit={deletePresentation} onClose={toggleModalDeletePres} presentationId={presentationId} />}
       {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} />}
       {slideIndex > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
