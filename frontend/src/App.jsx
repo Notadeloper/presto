@@ -4,7 +4,6 @@ import { Login } from './pages/login.jsx';
 import { Register } from './pages/register.jsx';
 import { Dashboard } from './pages/dashboard.jsx';
 import { Presentation } from './pages/presentation.jsx';
-import { Preview } from './pages/preview.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App () {
@@ -27,7 +26,6 @@ function App () {
           <Route path="/login" element={<Login token={token} setTokenFunction={setTokenAbstract}/>} />
           <Route path="/dashboard" element={<Dashboard token={token} setTokenFunction={setTokenAbstract}/>} />
           <Route path="/presentations/:presentationId" element={<Presentation token={token} setTokenFunction={setTokenAbstract}/>}/>
-          <Route path="/presentations/:presentationId/preview" element={<Preview token={token} setTokenFunction={setTokenAbstract}/>}/>
         </Routes>
       </BrowserRouter>
     </>

@@ -5,9 +5,8 @@ import { modalStyle } from '../styles/style.jsx';
 export function AddTextModal ({ onSubmit, onClose }) {
   const [textSize, setTextSize] = React.useState({ height: '', width: '' });
   const [textColor, setTextColor] = React.useState('');
-  const [fontSize, setFontSize] = React.useState('sans-serif');
-  const [fontFamily, setFontFamily] = React.useState('');
-  const [elementContent, setElementContent] = React.useState('');
+  const [fontSize, setFontSize] = React.useState('');
+  const [textContent, setTextContent] = React.useState('');
   const [open, setOpen] = React.useState(true);
 
   const isValidHexColor = (hex) => {
@@ -24,9 +23,8 @@ export function AddTextModal ({ onSubmit, onClose }) {
       elementType: 'text',
       textSize,
       fontSize,
-      fontFamily,
       textColor,
-      elementContent,
+      textContent,
       textPosition: {
         x: 0,
         y: 0
@@ -87,16 +85,6 @@ export function AddTextModal ({ onSubmit, onClose }) {
         <TextField
           fullWidth
           margin="normal"
-          id="font-size"
-          label="Font Family"
-          type="text"
-          value={fontFamily}
-          onChange={(e) => setFontFamily(e.target.value)}
-          variant="outlined"
-        />
-        <TextField
-          fullWidth
-          margin="normal"
           id="text-color"
           label="Text Color (Hex Code)"
           type="text"
@@ -112,8 +100,8 @@ export function AddTextModal ({ onSubmit, onClose }) {
           id="text-size-width"
           label="Text Content"
           type="text"
-          value={elementContent}
-          onChange={(e) => setElementContent(e.target.value)}
+          value={textContent}
+          onChange={(e) => setTextContent(e.target.value)}
           variant="outlined"
           multiline
           rows={5}

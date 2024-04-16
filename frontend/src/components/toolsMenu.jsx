@@ -54,8 +54,7 @@ export function ToolsMenu ({ slide, setSlide }) {
     </Box>
   );
 
-  // This adds the new element to the database as well as updates the slide state
-  const addNewElement = async (newElement) => {
+  const addNewText = async (newTextElement) => {
     const token = localStorage.getItem('token');
     const presentationId = localStorage.getItem('currentPresentationId');
     try {
@@ -68,10 +67,10 @@ export function ToolsMenu ({ slide, setSlide }) {
       const currentStore = response.data.store;
       const currentPresentation = currentStore.presentations[presentationId];
       const currentSlide = currentPresentation.slides.find(s => s.id === slide.id);
-      currentSlide.elements.push(newElement);
+      currentSlide.elements.push(newTextElement);
       const updatedSlide = {
         ...slide,
-        elements: [...slide.elements, newElement]
+        elements: [...slide.elements, newTextElement]
       };
       setSlide(updatedSlide);
       await axios.put('http://localhost:5005/store', { store: currentStore }, {
@@ -84,16 +83,29 @@ export function ToolsMenu ({ slide, setSlide }) {
       alert(err);
     }
   }
+
+  const addNewImage = async () => {
+
+  }
+
+  const addNewVideo = async () => {
+
+  }
+
+  const addNewCode = async () => {
+
+  }
+
   return (
     <div>
       <Button onClick={toggleToolbox(true)} aria-label="open toolbox">Open Toolbox</Button>
       <Drawer open={open} onClose={toggleToolbox(false)}>
         {ToolboxList}
       </Drawer>
-      {modalState.text && <AddTextModal onSubmit={addNewElement} onClose={() => toggleModal('text')} />}
-      {modalState.image && <AddImageModal onSubmit={addNewElement} onClose={() => toggleModal('image')} />}
-      {modalState.video && <AddVideoModal onSubmit={addNewElement} onClose={() => toggleModal('video')} />}
-      {modalState.code && <AddCodeModal onSubmit={addNewElement} onClose={() => toggleModal('code')} />}
+      {modalState.text && <AddTextModal onSubmit={addNewText} onClose={() => toggleModal('text')} />}
+      {modalState.image && <AddImageModal onSubmit={addNewImage} onClose={() => toggleModal('image')} />}
+      {modalState.video && <AddVideoModal onSubmit={addNewVideo} onClose={() => toggleModal('video')} />}
+      {modalState.code && <AddCodeModal onSubmit={addNewCode} onClose={() => toggleModal('code')} />}
     </div>
   );
 }
