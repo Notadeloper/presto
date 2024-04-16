@@ -5,7 +5,7 @@ import { modalStyle } from '../styles/style.jsx';
 export function AddCodeModal ({ onSubmit, onClose }) {
   const [codeSize, setCodeSize] = React.useState({ height: '', width: '' });
   const [fontSize, setFontSize] = React.useState('');
-  const [codeContent, setCodeContent] = React.useState('');
+  const [elementContent, setElementContent] = React.useState('');
   const [open, setOpen] = React.useState(true);
 
   const handleClose = () => {
@@ -19,7 +19,7 @@ export function AddCodeModal ({ onSubmit, onClose }) {
       elementType: 'code',
       codeSize,
       fontSize,
-      codeContent,
+      elementContent,
       codePosition: {
         x: 0,
         y: 0
@@ -83,8 +83,8 @@ export function AddCodeModal ({ onSubmit, onClose }) {
           id="text-size-width"
           label="Code Content"
           type="text"
-          value={codeContent}
-          onChange={(e) => setCodeContent(e.target.value)}
+          value={elementContent}
+          onChange={(e) => setElementContent(e.target.value)}
           variant="outlined"
           multiline
           rows={5}

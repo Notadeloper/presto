@@ -11,6 +11,7 @@ import { EditTitleModal } from '../components/editTitleModal.jsx';
 import { NewSlideButton } from '../components/newSlideButton.jsx';
 import { SlideLeftButton } from '../components/slideLeftButton.jsx';
 import { SlideRightButton } from '../components/slideRightButton.jsx';
+import { ViewPreviewButton } from '../components/viewPreviewButton.jsx';
 import { ToolsMenu } from '../components/toolsMenu.jsx';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -214,6 +215,39 @@ export function Presentation ({ token, setTokenFunction }) {
     }
   }
 
+  const updateElementContent = async (elementIndex, slide, updatedContent) => {
+    try {
+      const response = await axios.get('http://localhost:5005/store', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      const currentStore = response.data.store;
+      const currentPresentations = currentStore.presentations;
+      const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
+      const currentElement = currentSlide.elements[elementIndex];
+      currentElement.elementContent = updatedContent;
+      await axios.put('http://localhost:5005/store', { store: currentStore }, {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setSlide(currentSlide);
+    } catch (err) {
+      alert(err);
+      console.log(err);
+    }
+  }
+
+  const updateTextFont = async () => {
+
+  }
+
+  const openPreview = () => {
+    const previewUrl = window.location.origin + '/presentations' + `/${presentationId}` + '/preview';
+    window.open(previewUrl, '_blank');
+  }
+
   if (!presentation) {
     return <div>Loading Presentation...</div>;
   }
@@ -226,8 +260,9 @@ export function Presentation ({ token, setTokenFunction }) {
       <DeletePresentationButton onClick={toggleModalDeletePres}/>
       <EditTitleButton onClick={toggleModalEditTitle}/>
       <NewSlideButton onClick={createNewSlide} presentationId={presentationId}/>
+      <ViewPreviewButton onClick={openPreview}/>
       <ToolsMenu slide={slide} setSlide={setSlide}/>
-      <SlideCard slide={slide} deleteElement={deleteElement}/>
+      <SlideCard slide={slide} deleteElement={deleteElement} updateElementContent={updateElementContent} updateTextFont={updateTextFont}/>
       {isModalDeletePresVisible && <DeletePresentationModal onSubmit={deletePresentation} onClose={toggleModalDeletePres} presentationId={presentationId} />}
       {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} />}
       {slideIndex > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
