@@ -1,15 +1,32 @@
 import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import { slideCardStyle } from '../styles/style.jsx';
+import AceEditor from 'react-ace';
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/theme-monokai';
+import 'ace-builds/webpack-resolver';
+import hljs from 'highlight.js';
+import { slideCardStyle, elementsContainer } from '../styles/style.jsx';
 
-export function SlideCard ({ slide }) {
+export function SlideCard ({ slide, deleteElement, updateElementContent, updateTextFont }) {
   if (!slide) {
     return <div>Loading slides...</div>;
   }
+
+  // This deletes the element if we right click
+  const handleRightClick = (e, index, slide) => {
+    e.preventDefault();
+    deleteElement(index, slide);
+  };
+
+  // This is for editing the element as a textbox
+  const handleChange = (newValue, index, slide) => {
+    updateElementContent(index, slide, newValue);
+  };
+
   console.log(slide);
   return (
+<<<<<<< HEAD
     <Card sx={slideCardStyle} aria-label="slide card">
       <CardContent style={{ width: '100%', height: '100%', padding: '0px' }}>
         {slide.elements.filter(element => element.elementType === 'text').map((textElement, index) => (
@@ -28,6 +45,71 @@ export function SlideCard ({ slide }) {
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {slide.id} <br/>
         </Typography>
+=======
+    <Card sx={slideCardStyle}>
+      <CardContent style={elementsContainer}>
+        {slide.elements.map((slideElement, index) => {
+          if (slideElement.elementType === 'text') {
+            return (
+              <textarea
+                key={index}
+                value={slideElement.elementContent}
+                onChange={(e) => handleChange(e.target.value, index, slide)}
+                style={{
+                  position: 'absolute',
+                  top: `${slideElement.textPosition.y}%`,
+                  left: `${slideElement.textPosition.x}%`,
+                  height: `${slideElement.textSize.height}%`,
+                  width: `${slideElement.textSize.width}%`,
+                  fontSize: `${slideElement.fontSize}em`,
+                  fontFamily: slideElement.fontFamily,
+                  color: `#${slideElement.textColor}`,
+                  overflow: 'hidden',
+                  resize: 'none',
+                  textAlign: 'left',
+                  border: '1px solid lightgrey',
+                  zIndex: index,
+                  backgroundColor: 'transparent'
+                }}
+                onContextMenu={(event) => handleRightClick(event, index, slide)}
+              />
+            );
+          } else if (slideElement.elementType === 'code') {
+            const codeLanguage = hljs.highlightAuto(slideElement.elementContent, ['c', 'javascript', 'python']).language || 'javascript';
+            console.log(codeLanguage);
+            return (
+              <div
+                key={index}
+                style={{
+                  position: 'absolute',
+                  top: `${slideElement.codePosition.y}%`,
+                  left: `${slideElement.codePosition.x}%`,
+                  height: `${slideElement.codeSize.height}%`,
+                  width: `${slideElement.codeSize.width}%`,
+                  zIndex: index
+                }}
+                onContextMenu={(event) => handleRightClick(event, index, slide)}
+              >
+                <AceEditor
+                  mode={codeLanguage}
+                  theme="monokai"
+                  name={index.toString()}
+                  value={slideElement.elementContent}
+                  onChange={(newValue) => handleChange(newValue, index, slide)}
+                  fontSize={slideElement.fontSize}
+                  showPrintMargin={false}
+                  setOptions={{
+                    showLineNumbers: true,
+                    tabSize: 2,
+                  }}
+                  style={{ width: '100%', height: '100%' }}
+                />
+              </div>
+            );
+          }
+          return null;
+        })}
+>>>>>>> d92aefa90d4496a93ed7b70bba04d76debd97229
       </CardContent>
     </Card>
   );
