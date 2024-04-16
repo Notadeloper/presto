@@ -1,7 +1,7 @@
 import React from 'react';
+import hljs from 'highlight.js';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import { slideCardStyle, elementsContainer } from '../styles/style.jsx';
 
 export function SlideCard ({ slide, deleteElement }) {
@@ -13,6 +13,15 @@ export function SlideCard ({ slide, deleteElement }) {
     e.preventDefault();
     deleteElement(index, slide);
   };
+
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    if (ref.current) {
+      ref.current.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightBlock(block);
+      });
+    }
+  }, [slide]);
 
   console.log(slide);
   return (
@@ -39,12 +48,29 @@ export function SlideCard ({ slide, deleteElement }) {
                 {slideElement.textContent}
               </div>
             );
+          } else if (slideElement.elementType === 'code') {
+            return (
+              <div key={index} style={{
+                position: 'absolute',
+                top: `${slideElement.codePosition.y}%`,
+                left: `${slideElement.codePosition.x}%`,
+                height: `${slideElement.codeSize.height}%`,
+                width: `${slideElement.codeSize.width}%`,
+                fontSize: `${slideElement.fontSize}em`,
+                overflow: 'hidden',
+                textAlign: 'left',
+                zIndex: index
+              }}
+              onContextMenu={(event) => handleRightClick(event, index, slide)}
+              >
+                <code>
+                  {slideElement.codeContent}
+                </code>
+              </div>
+            );
           }
           return null;
         })}
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {slide.id} <br/>
-        </Typography>
       </CardContent>
     </Card>
   );
