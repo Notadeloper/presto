@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 export function DeletePresentationButton ({ onClick }) {
   return (
-    <Button onClick={onClick} variant="contained" color="error" endIcon={<DeleteIcon />}>
+    <Button onClick={onClick} variant="contained" color="error" endIcon={<DeleteIcon />} aria-label="delete presentation">
       Delete Presentation
     </Button>
   );

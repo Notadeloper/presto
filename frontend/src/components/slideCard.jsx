@@ -10,7 +10,7 @@ export function SlideCard ({ slide }) {
   }
   console.log(slide);
   return (
-    <Card sx={slideCardStyle}>
+    <Card sx={slideCardStyle} aria-label="slide card">
       <CardContent style={{ width: '100%', height: '100%', padding: '0px' }}>
         {slide.elements.filter(element => element.elementType === 'text').map((textElement, index) => (
           <div key={index} style={{

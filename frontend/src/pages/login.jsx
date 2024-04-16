@@ -13,6 +13,10 @@ export function Login ({ token, setTokenFunction }) {
     navigate('/dashboard');
   }
 
+  const navigateToRegister = () => {
+    navigate('/register');
+  }
+
   const login = async () => {
     try {
       const response = await axios.post('http://localhost:5005/admin/auth/login', {
@@ -54,8 +58,11 @@ export function Login ({ token, setTokenFunction }) {
         variant="outlined"
         required
       />
-      <Button variant="contained" color="primary" type="submit" sx={{ mt: 3 }}>
+      <Button variant="contained" color="primary" type="submit" sx={{ mt: 3 }} aria-label="login">
         Submit
+      </Button>
+      <Button variant="contained" color="primary" onClick={navigateToRegister} sx={{ mt: 3 }}>
+        Need an account? Register
       </Button>
     </Box>
   );

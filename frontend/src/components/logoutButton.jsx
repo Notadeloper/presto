@@ -23,7 +23,7 @@ export function LogoutButton ({ token, setToken }) {
   }
 
   return (
-    <Button onClick={logout} variant="contained" color="error" endIcon={<LogoutIcon />}>
+    <Button onClick={logout} variant="contained" color="error" endIcon={<LogoutIcon />} aria-label="logout">
       Logout
     </Button>
   );
