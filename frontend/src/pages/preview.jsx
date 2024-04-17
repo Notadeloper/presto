@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Slide, Box } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { LogoutButton } from '../components/logoutButton.jsx';
 import { SlideCardPreview } from '../components/slideCardPreview';
 import { SlideLeftButton } from '../components/slideLeftButton.jsx';
@@ -10,10 +10,11 @@ import { ErrorModal } from '../components/errorModal.jsx';
 import { previewFlexContainer } from '../styles/style.jsx';
 
 export function Preview ({ token, setTokenFunction }) {
-  const { presentationId } = useParams();
+  const { presentationId, urlSlideIndex } = useParams();
+  const navigate = useNavigate();
   const [presentation, setPresentation] = React.useState(null);
   const [slide, setSlide] = React.useState(null);
-  const [slideIndex, setSlideIndex] = React.useState(0);
+  const [slideIndex, setSlideIndex] = React.useState(Number(urlSlideIndex));
   const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
   const [errorText, setErrorText] = React.useState('');
   const [inProp, setInProp] = React.useState(true);
@@ -80,6 +81,7 @@ export function Preview ({ token, setTokenFunction }) {
           const currentStore = response.data.store;
           const currentPresentations = currentStore.presentations;
           setSlide(currentPresentations[presentationId].slides[currentSlideIndex - 1]);
+          navigate(`/presentations/${presentationId}/${currentSlideIndex - 1}/preview`);
           setDirection('right');
           setInProp(true);
         } catch (err) {
@@ -107,6 +109,7 @@ export function Preview ({ token, setTokenFunction }) {
           const currentStore = response.data.store;
           const currentPresentations = currentStore.presentations;
           setSlide(currentPresentations[presentationId].slides[currentSlideIndex + 1]);
+          navigate(`/presentations/${presentationId}/${currentSlideIndex + 1}/preview`);
           setDirection('left');
           setInProp(true);
         } catch (err) {

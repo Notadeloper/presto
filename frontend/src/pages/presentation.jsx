@@ -22,11 +22,11 @@ import { ThemePickerButton } from '../components/themePickerButton.jsx';
 import { ThemePickerModal } from '../components/themePickerModal.jsx';
 
 export function Presentation ({ token, setTokenFunction }) {
-  const { presentationId } = useParams();
+  const { presentationId, urlSlideIndex } = useParams();
   const navigate = useNavigate();
   const [presentation, setPresentation] = React.useState(null);
   const [slide, setSlide] = React.useState(null);
-  const [slideIndex, setSlideIndex] = React.useState(0);
+  const [slideIndex, setSlideIndex] = React.useState(Number(urlSlideIndex));
   const [isModalDeletePresVisible, setIsModalDeletePresVisible] = React.useState(false);
   const [isModalEditTitleVisible, setIsModalEditTitleVisible] = React.useState(false);
   const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
@@ -185,7 +185,7 @@ export function Presentation ({ token, setTokenFunction }) {
       setInProp(false);
       setTimeout(async () => {
         const currentSlideIndex = slideIndex;
-        setSlideIndex(slideIndex - 1);
+        setSlideIndex(Number(slideIndex) - 1);
         try {
           const response = await axios.get('http://localhost:5005/store', {
             headers: {
@@ -194,8 +194,9 @@ export function Presentation ({ token, setTokenFunction }) {
           });
           const currentStore = response.data.store;
           const currentPresentations = currentStore.presentations;
-          setSlide(currentPresentations[presentationId].slides[currentSlideIndex - 1]);
+          setSlide(currentPresentations[presentationId].slides[Number(currentSlideIndex) - 1]);
           setDirection('right');
+          navigate(`/presentations/${presentationId}/${Number(currentSlideIndex) - 1}`);
           setInProp(true);
         } catch (err) {
           setErrorText(err.response.data.error);
@@ -212,7 +213,7 @@ export function Presentation ({ token, setTokenFunction }) {
       setInProp(false);
       setTimeout(async () => {
         const currentSlideIndex = slideIndex;
-        setSlideIndex(slideIndex + 1);
+        setSlideIndex(Number(slideIndex) + 1);
         try {
           const response = await axios.get('http://localhost:5005/store', {
             headers: {
@@ -221,7 +222,8 @@ export function Presentation ({ token, setTokenFunction }) {
           });
           const currentStore = response.data.store;
           const currentPresentations = currentStore.presentations;
-          setSlide(currentPresentations[presentationId].slides[currentSlideIndex + 1]);
+          setSlide(currentPresentations[presentationId].slides[Number(currentSlideIndex) + 1]);
+          navigate(`/presentations/${presentationId}/${Number(currentSlideIndex) + 1}`);
           setDirection('left');
           setInProp(true);
         } catch (err) {
@@ -247,7 +249,7 @@ export function Presentation ({ token, setTokenFunction }) {
         return;
       }
       const updatedSlides = currentSlides.filter(s => s.id !== slide.id);
-      const previousSlideIndex = currentSlides.findIndex(s => s.id === slide.id);
+      const previousSlideIndex = Number(currentSlides.findIndex(s => s.id === slide.id));
       currentPresentations[presentationId].slides = updatedSlides;
 
       await axios.put('http://localhost:5005/store', { store: currentStore }, {
@@ -262,9 +264,11 @@ export function Presentation ({ token, setTokenFunction }) {
       if (previousSlideIndex > 0) {
         setSlide(currentSlides[previousSlideIndex - 1]);
         setSlideIndex(previousSlideIndex - 1);
+        navigate(`/presentations/${presentationId}/${previousSlideIndex - 1}`);
       } else if (previousSlideIndex === 0) {
         setSlide(currentSlides[0]);
         setSlideIndex(0);
+        navigate(`/presentations/${presentationId}/${Number(0)}`);
       }
     } catch (err) {
       setErrorText(err.response.data.error);
@@ -320,7 +324,7 @@ export function Presentation ({ token, setTokenFunction }) {
   }
 
   const openPreview = () => {
-    const previewUrl = window.location.origin + '/presentations' + `/${presentationId}` + '/preview';
+    const previewUrl = window.location.origin + '/presentations' + `/${presentationId}` + '/0' + '/preview';
     window.open(previewUrl, '_blank');
   }
 
@@ -377,8 +381,8 @@ export function Presentation ({ token, setTokenFunction }) {
           )}
       {isModalDeletePresVisible && <DeletePresentationModal onSubmit={deletePresentation} onClose={toggleModalDeletePres} presentationId={presentationId} />}
       {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} />}
-      {slideIndex > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
-      {slideIndex < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}
+      {Number(slideIndex) > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
+      {Number(slideIndex) < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}
       {isModalThemePickerVisible && <ThemePickerModal onSubmit={updateBackgroundColour} onClose={toggleModalThemePicker}/>}
       {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
       {isModalErrorDeleteSlideVisible && <ErrorDeleteSlideModal onSubmit={deletePresentation} onClose={toggleModalErrorDeleteSlide} presentationId={presentationId} />}

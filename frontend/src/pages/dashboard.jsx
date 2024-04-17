@@ -110,7 +110,7 @@ export function Dashboard ({ token, setTokenFunction }) {
           Authorization: token,
         }
       });
-      navigate(`/presentations/${newPresentation.id}`);
+      navigate(`/presentations/${newPresentation.id}/0`);
     } catch (err) {
       setErrorText(err.response.data.error);
       toggleModalError(!isModalErrorVisible);

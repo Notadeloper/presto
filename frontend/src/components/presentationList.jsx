@@ -11,7 +11,7 @@ export function PresentationList ({ presentations }) {
   const navigate = useNavigate();
 
   const handlePresentationClick = (presentationId) => {
-    navigate(`/presentations/${presentationId}`);
+    navigate(`/presentations/${presentationId}/0`);
   };
 
   return (
