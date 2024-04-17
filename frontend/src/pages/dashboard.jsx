@@ -82,10 +82,12 @@ export function Dashboard ({ token, setTokenFunction }) {
       title: presentationTitle,
       thumbnail: null,
       description: null,
+      defaultBgColor: null,
       slides: [
         {
           id: uuidv4(),
-          elements: []
+          elements: [],
+          currentBgColor: null
         }
       ]
     };

@@ -128,11 +128,11 @@ export function Preview ({ token, setTokenFunction }) {
       </Box>
       <Box sx={{ position: 'absolute', bottom: 0 }}>
         {notStartedNavigation
-          ? (<SlideCardPreview slide={slide} slideIndex={slideIndex}/>)
+          ? (<SlideCardPreview slide={slide} slideIndex={slideIndex} defaultBackgroundColor={presentation.defaultBgColor}/>)
           : (
           <Slide in={inProp} direction={direction}>
             <div>
-              <SlideCardPreview slide={slide} slideIndex={slideIndex}/>
+              <SlideCardPreview slide={slide} slideIndex={slideIndex} defaultBackgroundColor={presentation.defaultBgColor}/>
             </div>
           </Slide>
             )}
