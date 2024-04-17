@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import { Slide } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { LogoutButton } from '../components/logoutButton.jsx';
 import { DashboardButton } from '../components/dashboardButton.jsx';
@@ -9,6 +8,8 @@ import { DeletePresentationModal } from '../components/deletePresentationModal.j
 import { SlideCard } from '../components/slideCard.jsx';
 import { EditTitleButton } from '../components/editTitleButton.jsx';
 import { EditTitleModal } from '../components/editTitleModal.jsx';
+import { EditThumbnailButton } from '../components/editThumbnailButton.jsx';
+import { EditThumbnailModal } from '../components/editThumbnailModal.jsx';
 import { NewSlideButton } from '../components/newSlideButton.jsx';
 import { SlideLeftButton } from '../components/slideLeftButton.jsx';
 import { SlideRightButton } from '../components/slideRightButton.jsx';
@@ -24,9 +25,7 @@ export function Presentation ({ token, setTokenFunction }) {
   const [slideIndex, setSlideIndex] = React.useState(0);
   const [isModalDeletePresVisible, setIsModalDeletePresVisible] = React.useState(false);
   const [isModalEditTitleVisible, setIsModalEditTitleVisible] = React.useState(false);
-  const [inProp, setInProp] = React.useState(true);
-  const [direction, setDirection] = React.useState('left');
-  const [notStartedNavigation, setNotStartedNavigation] = React.useState(true);
+  const [isModalEditThumbnailVisible, setIsModalEditThumbnailVisible] = React.useState(false);
 
   localStorage.setItem('currentPresentationId', presentationId);
 
@@ -124,6 +123,35 @@ export function Presentation ({ token, setTokenFunction }) {
     }
   };
 
+  const toggleModalEditThumbnail = () => {
+    setIsModalEditThumbnailVisible(!isModalEditThumbnailVisible);
+  };
+
+  const editPresentationThumbnail = async (presentationId, presentationThumbnail) => {
+    try {
+      const response = await axios.get('http://localhost:5005/store', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      const currentStore = response.data.store;
+      const currentPresentations = currentStore.presentations;
+      currentPresentations[presentationId].thumbnail = presentationThumbnail;
+
+      await axios.put('http://localhost:5005/store', { store: currentStore }, {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setPresentation(prev => ({
+        ...prev,
+        Thumbnail: presentationThumbnail
+      }));
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   const createNewSlide = async (presentationId) => {
     const newSlide = {
       id: uuidv4(),
@@ -156,55 +184,43 @@ export function Presentation ({ token, setTokenFunction }) {
 
   const doSlideLeft = async () => {
     if (slideIndex > 0) {
-      setDirection('left');
-      setNotStartedNavigation(false);
-      setInProp(false);
-      setTimeout(async () => {
-        const currentSlideIndex = slideIndex;
-        setSlideIndex(slideIndex - 1);
-        try {
-          const response = await axios.get('http://localhost:5005/store', {
-            headers: {
-              Authorization: token,
-            }
-          });
-          const currentStore = response.data.store;
-          const currentPresentations = currentStore.presentations;
-          setSlide(currentPresentations[presentationId].slides[currentSlideIndex - 1]);
-          setDirection('right');
-          setInProp(true);
-        } catch (err) {
-          alert(err);
-          console.log(err);
-        }
-      }, 200);
+      const currentSlideIndex = slideIndex;
+      setSlideIndex(slideIndex - 1);
+      try {
+        const response = await axios.get('http://localhost:5005/store', {
+          headers: {
+            Authorization: token,
+          }
+        });
+        const currentStore = response.data.store;
+        const currentPresentations = currentStore.presentations;
+        console.log(currentPresentations[presentationId].slides[currentSlideIndex - 1]);
+        setSlide(currentPresentations[presentationId].slides[currentSlideIndex - 1]);
+      } catch (err) {
+        alert(err);
+        console.log(err);
+      }
     }
   }
 
   const doSlideRight = async () => {
     if (slideIndex < presentation.slides.length - 1) {
-      setDirection('right');
-      setNotStartedNavigation(false);
-      setInProp(false);
-      setTimeout(async () => {
-        const currentSlideIndex = slideIndex;
-        setSlideIndex(slideIndex + 1);
-        try {
-          const response = await axios.get('http://localhost:5005/store', {
-            headers: {
-              Authorization: token,
-            }
-          });
-          const currentStore = response.data.store;
-          const currentPresentations = currentStore.presentations;
-          setSlide(currentPresentations[presentationId].slides[currentSlideIndex + 1]);
-          setDirection('left');
-          setInProp(true);
-        } catch (err) {
-          alert(err);
-          console.log(err);
-        }
-      }, 200);
+      const currentSlideIndex = slideIndex;
+      setSlideIndex(slideIndex + 1);
+      try {
+        const response = await axios.get('http://localhost:5005/store', {
+          headers: {
+            Authorization: token,
+          }
+        });
+        const currentStore = response.data.store;
+        const currentPresentations = currentStore.presentations;
+        console.log(currentPresentations[presentationId].slides[currentSlideIndex + 1]);
+        setSlide(currentPresentations[presentationId].slides[currentSlideIndex + 1]);
+      } catch (err) {
+        alert(err);
+        console.log(err);
+      }
     }
   }
 
@@ -275,20 +291,14 @@ export function Presentation ({ token, setTokenFunction }) {
       <DashboardButton/>
       <DeletePresentationButton onClick={toggleModalDeletePres}/>
       <EditTitleButton onClick={toggleModalEditTitle}/>
+      <EditThumbnailButton onClick={toggleModalEditThumbnail}/>
       <NewSlideButton onClick={createNewSlide} presentationId={presentationId}/>
       <ViewPreviewButton onClick={openPreview}/>
       <ToolsMenu slide={slide} setSlide={setSlide}/>
-      {notStartedNavigation
-        ? (<SlideCard slide={slide} deleteElement={deleteElement} updateElementContent={updateElementContent} updateTextFont={updateTextFont} />)
-        : (
-        <Slide in={inProp} direction={direction}>
-          <div>
-          <SlideCard slide={slide} deleteElement={deleteElement} updateElementContent={updateElementContent} updateTextFont={updateTextFont} />
-          </div>
-        </Slide>
-          )}
+      <SlideCard slide={slide} deleteElement={deleteElement} updateElementContent={updateElementContent} updateTextFont={updateTextFont}/>
       {isModalDeletePresVisible && <DeletePresentationModal onSubmit={deletePresentation} onClose={toggleModalDeletePres} presentationId={presentationId} />}
       {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} />}
+      {isModalEditThumbnailVisible && <EditThumbnailModal onSubmit={editPresentationThumbnail} onClose={toggleModalEditThumbnail} presentationId={presentationId} />}
       {slideIndex > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
       {slideIndex < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}
     </>
