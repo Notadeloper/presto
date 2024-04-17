@@ -26,26 +26,6 @@ export function SlideCard ({ slide, deleteElement, updateElementContent, updateT
 
   console.log(slide);
   return (
-<<<<<<< HEAD
-    <Card sx={slideCardStyle} aria-label="slide card">
-      <CardContent style={{ width: '100%', height: '100%', padding: '0px' }}>
-        {slide.elements.filter(element => element.elementType === 'text').map((textElement, index) => (
-          <div key={index} style={{
-            height: `${textElement.textSize.height}%`,
-            width: `${textElement.textSize.width}%`,
-            fontSize: `${textElement.fontSize}em`,
-            color: `#${textElement.textColor}`,
-            overflow: 'hidden',
-            textAlign: 'left',
-            border: '1px solid lightgrey',
-          }}>
-            {textElement.textContent}
-          </div>
-        ))}
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {slide.id} <br/>
-        </Typography>
-=======
     <Card sx={slideCardStyle}>
       <CardContent style={elementsContainer}>
         {slide.elements.map((slideElement, index) => {
@@ -109,7 +89,6 @@ export function SlideCard ({ slide, deleteElement, updateElementContent, updateT
           }
           return null;
         })}
->>>>>>> d92aefa90d4496a93ed7b70bba04d76debd97229
       </CardContent>
     </Card>
   );
