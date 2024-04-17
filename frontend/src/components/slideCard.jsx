@@ -11,7 +11,6 @@ import { slideCardStyle, slideIndexStyle, elementsContainer } from '../styles/st
 
 export function SlideCard ({ slide, slideIndex, deleteElement, updateElementContent, defaultBackgroundColor }) {
   const [backgroundColor, setBackgroundColor] = React.useState('ffffff');
-
   // This deletes the element if we right click
   const handleRightClick = (e, index, slide) => {
     e.preventDefault();
@@ -98,7 +97,7 @@ export function SlideCard ({ slide, slideIndex, deleteElement, updateElementCont
           return null;
         })}
         <Box sx={slideIndexStyle}>
-          {slideIndex + 1}
+          {Number(slideIndex) + 1}
         </Box>
       </CardContent>
     </Card>
