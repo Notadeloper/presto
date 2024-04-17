@@ -16,15 +16,22 @@ import { AddTextModal } from '../components/addTextModal.jsx';
 import { AddCodeModal } from '../components/addCodeModal.jsx';
 import { AddVideoModal } from '../components/addVideoModal.jsx';
 import { AddImageModal } from '../components/addImageModal.jsx';
+import { ErrorModal } from '../components/errorModal.jsx';
 
 export function ToolsMenu ({ slide, setSlide }) {
   const [open, setOpen] = React.useState(false);
+  const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
+  const [errorText, setErrorText] = React.useState('');
   const [modalState, setModalState] = React.useState({
     text: false,
     image: false,
     video: false,
     code: false
   });
+
+  const toggleModalError = () => {
+    setIsModalErrorVisible(!isModalErrorVisible);
+  };
 
   const toggleToolbox = (newOpen) => () => {
     setOpen(newOpen);
@@ -80,8 +87,8 @@ export function ToolsMenu ({ slide, setSlide }) {
         }
       });
     } catch (err) {
-      console.log(err);
-      alert(err);
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
     }
   }
   return (
@@ -94,6 +101,7 @@ export function ToolsMenu ({ slide, setSlide }) {
       {modalState.image && <AddImageModal onSubmit={addNewElement} onClose={() => toggleModal('image')} />}
       {modalState.video && <AddVideoModal onSubmit={addNewElement} onClose={() => toggleModal('video')} />}
       {modalState.code && <AddCodeModal onSubmit={addNewElement} onClose={() => toggleModal('code')} />}
+      {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
     </div>
   );
 }

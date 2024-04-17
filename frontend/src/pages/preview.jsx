@@ -2,12 +2,19 @@ import React from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { SlideCardPreview } from '../components/slideCardPreview';
+import { ErrorModal } from '../components/errorModal.jsx';
 
 export function Preview ({ token, setTokenFunction }) {
   const { presentationId } = useParams();
   const [presentation, setPresentation] = React.useState(null);
   const [slide, setSlide] = React.useState(null);
   const [slideIndex, setSlideIndex] = React.useState(0);
+  const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
+  const [errorText, setErrorText] = React.useState('');
+
+  const toggleModalError = () => {
+    setIsModalErrorVisible(!isModalErrorVisible);
+  };
 
   React.useEffect(() => {
     const fetchPresentation = async () => {
@@ -21,7 +28,8 @@ export function Preview ({ token, setTokenFunction }) {
         setPresentation(fetchedPresentation);
         setSlide(fetchedPresentation.slides[slideIndex]);
       } catch (err) {
-        alert(err);
+        setErrorText(err.response.data.error);
+        toggleModalError(!isModalErrorVisible);
       }
     };
     if (presentationId) {
@@ -32,6 +40,9 @@ export function Preview ({ token, setTokenFunction }) {
   console.log(presentation, setSlideIndex);
 
   return (
-    <SlideCardPreview slide={slide}/>
+    <>
+      <SlideCardPreview slide={slide}/>
+      {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
+    </>
   );
 }

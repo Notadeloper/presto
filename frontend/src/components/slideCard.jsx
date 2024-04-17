@@ -8,7 +8,7 @@ import 'ace-builds/webpack-resolver';
 import hljs from 'highlight.js';
 import { slideCardStyle, elementsContainer } from '../styles/style.jsx';
 
-export function SlideCard ({ slide, deleteElement, updateElementContent, updateTextFont }) {
+export function SlideCard ({ slide, slideIndex, deleteElement, updateElementContent }) {
   if (!slide) {
     return <div>Loading slides...</div>;
   }
@@ -24,7 +24,6 @@ export function SlideCard ({ slide, deleteElement, updateElementContent, updateT
     updateElementContent(index, slide, newValue);
   };
 
-  console.log(slide);
   return (
     <Card sx={slideCardStyle}>
       <CardContent style={elementsContainer}>
@@ -56,7 +55,6 @@ export function SlideCard ({ slide, deleteElement, updateElementContent, updateT
             );
           } else if (slideElement.elementType === 'code') {
             const codeLanguage = hljs.highlightAuto(slideElement.elementContent, ['c', 'javascript', 'python']).language || 'javascript';
-            console.log(codeLanguage);
             return (
               <div
                 key={index}
@@ -89,6 +87,8 @@ export function SlideCard ({ slide, deleteElement, updateElementContent, updateT
           }
           return null;
         })}
+        {slideIndex + 1} <br />
+        {slide.id}
       </CardContent>
     </Card>
   );
