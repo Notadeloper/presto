@@ -6,8 +6,8 @@ import { ErrorModal } from '../components/errorModal.jsx';
 export function AddTextModal ({ onSubmit, onClose }) {
   const [textSize, setTextSize] = React.useState({ height: '', width: '' });
   const [textColor, setTextColor] = React.useState('');
-  const [fontSize, setFontSize] = React.useState('sans-serif');
-  const [fontFamily, setFontFamily] = React.useState('');
+  const [fontSize, setFontSize] = React.useState('');
+  const [fontFamily, setFontFamily] = React.useState('sans-serif');
   const [elementContent, setElementContent] = React.useState('');
   const [open, setOpen] = React.useState(true);
   const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
@@ -61,7 +61,6 @@ export function AddTextModal ({ onSubmit, onClose }) {
             id="text-size-height"
             label="Text Area Height (%)"
             type="number"
-            value={textSize.height}
             onChange={(e) => setTextSize({ ...textSize, height: e.target.value })}
             variant="outlined"
             InputProps={{ endAdornment: '%', inputProps: { min: 0, max: 100 } }}
@@ -74,7 +73,6 @@ export function AddTextModal ({ onSubmit, onClose }) {
             id="text-size-width"
             label="Text Area Width (%)"
             type="number"
-            value={textSize.width}
             onChange={(e) => setTextSize({ ...textSize, width: e.target.value })}
             variant="outlined"
             InputProps={{ endAdornment: '%', inputProps: { min: 0, max: 100 } }}
@@ -87,7 +85,6 @@ export function AddTextModal ({ onSubmit, onClose }) {
             id="font-size"
             label="Font Size (em)"
             type="number"
-            value={fontSize}
             onChange={(e) => setFontSize(e.target.value)}
             variant="outlined"
             InputProps={{ endAdornment: 'em' }}
@@ -99,7 +96,6 @@ export function AddTextModal ({ onSubmit, onClose }) {
             id="font-size"
             label="Font Family"
             type="text"
-            value={fontFamily}
             onChange={(e) => setFontFamily(e.target.value)}
             variant="outlined"
           />
@@ -109,7 +105,6 @@ export function AddTextModal ({ onSubmit, onClose }) {
             id="text-color"
             label="Text Color (Hex Code)"
             type="text"
-            value={textColor}
             onChange={(e) => setTextColor(e.target.value)}
             variant="outlined"
             InputProps={{ startAdornment: '#' }}
@@ -121,7 +116,6 @@ export function AddTextModal ({ onSubmit, onClose }) {
             id="text-size-width"
             label="Text Content"
             type="text"
-            value={elementContent}
             onChange={(e) => setElementContent(e.target.value)}
             variant="outlined"
             multiline

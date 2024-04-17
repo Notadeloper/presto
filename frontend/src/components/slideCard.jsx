@@ -6,7 +6,8 @@ import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-monokai';
 import 'ace-builds/webpack-resolver';
 import hljs from 'highlight.js';
-import { slideCardStyle, elementsContainer } from '../styles/style.jsx';
+import { Box } from '@mui/material';
+import { slideCardStyle, slideIndexStyle, elementsContainer } from '../styles/style.jsx';
 
 export function SlideCard ({ slide, slideIndex, deleteElement, updateElementContent }) {
   if (!slide) {
@@ -87,8 +88,9 @@ export function SlideCard ({ slide, slideIndex, deleteElement, updateElementCont
           }
           return null;
         })}
-        {slideIndex + 1} <br />
-        {slide.id}
+        <Box sx={slideIndexStyle}>
+          {slideIndex + 1}
+        </Box>
       </CardContent>
     </Card>
   );
