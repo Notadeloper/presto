@@ -3,11 +3,18 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Box, Typography } from '@mui/material';
 import { thisIsADivWrapperStyle } from '../styles/style';
+import { ErrorModal } from '../components/errorModal.jsx';
 
 export function Login ({ token, setTokenFunction }) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
+  const [errorText, setErrorText] = React.useState('');
   const navigate = useNavigate();
+
+  const toggleModalError = () => {
+    setIsModalErrorVisible(!isModalErrorVisible);
+  };
 
   if (token !== null) {
     navigate('/dashboard');
@@ -26,44 +33,48 @@ export function Login ({ token, setTokenFunction }) {
       setTokenFunction(response.data.token);
       navigate('/dashboard');
     } catch (err) {
-      alert(err.response.data.error);
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
     }
   }
 
   return (
-    <Box sx={thisIsADivWrapperStyle} component="form" onSubmit={(e) => {
-      e.preventDefault();
-      login();
-    }}>
-      <Typography variant="h6" component="h1" marginBottom={2}>
-        Login
-      </Typography>
-      <TextField
-        fullWidth
-        margin="normal"
-        label="Email Address"
-        type="email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        variant="outlined"
-        required
-      />
-      <TextField
-        fullWidth
-        margin="normal"
-        label="Password"
-        type="password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-        variant="outlined"
-        required
-      />
-      <Button variant="contained" color="primary" type="submit" sx={{ mt: 3 }} aria-label="login">
-        Submit
-      </Button>
-      <Button variant="contained" color="primary" onClick={navigateToRegister} sx={{ mt: 3 }}>
-        Need an account? Register
-      </Button>
-    </Box>
+    <>
+      <Box sx={thisIsADivWrapperStyle} component="form" onSubmit={(e) => {
+        e.preventDefault();
+        login();
+      }}>
+        <Typography variant="h6" component="h1" marginBottom={2}>
+          Login
+        </Typography>
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Email Address"
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          variant="outlined"
+          required
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Password"
+          type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          variant="outlined"
+          required
+        />
+        <Button variant="contained" color="primary" type="submit" sx={{ mt: 3 }} aria-label="login">
+          Submit
+        </Button>
+        <Button variant="contained" color="primary" onClick={navigateToRegister} sx={{ mt: 3 }}>
+          Need an account? Register
+        </Button>
+      </Box>
+      {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
+    </>
   );
 }

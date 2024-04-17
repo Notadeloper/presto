@@ -8,7 +8,7 @@ import 'ace-builds/webpack-resolver';
 import hljs from 'highlight.js';
 import { slideCardStyle, elementsContainer } from '../styles/style.jsx';
 
-export function SlideCard ({ slide, deleteElement, updateElementContent, updateTextFont }) {
+export function SlideCard ({ slide, slideIndex, deleteElement, updateElementContent }) {
   if (!slide) {
     return <div>Loading slides...</div>;
   }
@@ -87,6 +87,8 @@ export function SlideCard ({ slide, deleteElement, updateElementContent, updateT
           }
           return null;
         })}
+        {slideIndex + 1} <br />
+        {slide.id}
       </CardContent>
     </Card>
   );

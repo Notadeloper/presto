@@ -13,7 +13,10 @@ import { NewSlideButton } from '../components/newSlideButton.jsx';
 import { SlideLeftButton } from '../components/slideLeftButton.jsx';
 import { SlideRightButton } from '../components/slideRightButton.jsx';
 import { ViewPreviewButton } from '../components/viewPreviewButton.jsx';
+import { DeleteSlideButton } from '../components/deleteSlideButton.jsx';
 import { ToolsMenu } from '../components/toolsMenu.jsx';
+import { ErrorModal } from '../components/errorModal.jsx';
+import { ErrorDeleteSlideModal } from '../components/errorDeleteSlideModal.jsx';
 import { v4 as uuidv4 } from 'uuid';
 
 export function Presentation ({ token, setTokenFunction }) {
@@ -24,6 +27,9 @@ export function Presentation ({ token, setTokenFunction }) {
   const [slideIndex, setSlideIndex] = React.useState(0);
   const [isModalDeletePresVisible, setIsModalDeletePresVisible] = React.useState(false);
   const [isModalEditTitleVisible, setIsModalEditTitleVisible] = React.useState(false);
+  const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
+  const [isModalErrorDeleteSlideVisible, setIsModalErrorDeleteSlideVisible] = React.useState(false);
+  const [errorText, setErrorText] = React.useState('');
   const [inProp, setInProp] = React.useState(true);
   const [direction, setDirection] = React.useState('left');
   const [notStartedNavigation, setNotStartedNavigation] = React.useState(true);
@@ -42,7 +48,8 @@ export function Presentation ({ token, setTokenFunction }) {
         setPresentation(fetchedPresentation);
         setSlide(fetchedPresentation.slides[slideIndex]);
       } catch (err) {
-        alert(err);
+        setErrorText(err.response.data.error);
+        toggleModalError(!isModalErrorVisible);
       }
     };
     if (presentationId) {
@@ -53,7 +60,6 @@ export function Presentation ({ token, setTokenFunction }) {
   React.useEffect(() => {
     if (presentation?.slides?.length > slideIndex) {
       setSlide(presentation.slides[slideIndex]);
-      console.log('Updated slide index to:', slideIndex);
     }
     const handleKeyDown = (event) => {
       if (event.key === 'ArrowLeft') {
@@ -68,6 +74,14 @@ export function Presentation ({ token, setTokenFunction }) {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [slideIndex, presentation]);
+
+  const toggleModalError = () => {
+    setIsModalErrorVisible(!isModalErrorVisible);
+  };
+
+  const toggleModalErrorDeleteSlide = () => {
+    setIsModalErrorDeleteSlideVisible(!isModalErrorDeleteSlideVisible);
+  };
 
   const toggleModalDeletePres = () => {
     setIsModalDeletePresVisible(!isModalDeletePresVisible);
@@ -91,7 +105,8 @@ export function Presentation ({ token, setTokenFunction }) {
       });
       navigate('/dashboard');
     } catch (err) {
-      alert(err);
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
     }
   };
 
@@ -120,7 +135,8 @@ export function Presentation ({ token, setTokenFunction }) {
         title: presentationTitle
       }));
     } catch (err) {
-      alert(err);
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
     }
   };
 
@@ -149,8 +165,8 @@ export function Presentation ({ token, setTokenFunction }) {
         slides: currentPresentations[presentationId].slides
       }));
     } catch (err) {
-      alert(err);
-      console.log(err);
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
     }
   }
 
@@ -174,8 +190,8 @@ export function Presentation ({ token, setTokenFunction }) {
           setDirection('right');
           setInProp(true);
         } catch (err) {
-          alert(err);
-          console.log(err);
+          setErrorText(err.response.data.error);
+          toggleModalError(!isModalErrorVisible);
         }
       }, 200);
     }
@@ -201,10 +217,50 @@ export function Presentation ({ token, setTokenFunction }) {
           setDirection('left');
           setInProp(true);
         } catch (err) {
-          alert(err);
-          console.log(err);
+          setErrorText(err.response.data.error);
+          toggleModalError(!isModalErrorVisible);
         }
       }, 200);
+    }
+  }
+
+  const deleteSlide = async () => {
+    try {
+      const response = await axios.get('http://localhost:5005/store', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      const currentStore = response.data.store;
+      const currentPresentations = currentStore.presentations;
+      const currentSlides = currentPresentations[presentationId].slides;
+      if (currentSlides.length === 1) {
+        toggleModalErrorDeleteSlide();
+        return;
+      }
+      const updatedSlides = currentSlides.filter(s => s.id !== slide.id);
+      const previousSlideIndex = currentSlides.findIndex(s => s.id === slide.id);
+      currentPresentations[presentationId].slides = updatedSlides;
+
+      await axios.put('http://localhost:5005/store', { store: currentStore }, {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setPresentation(prev => ({
+        ...prev,
+        slides: updatedSlides
+      }));
+      if (previousSlideIndex > 0) {
+        setSlide(currentSlides[previousSlideIndex - 1]);
+        setSlideIndex(previousSlideIndex - 1);
+      } else if (previousSlideIndex === 0) {
+        setSlide(currentSlides[0]);
+        setSlideIndex(0);
+      }
+    } catch (err) {
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
     }
   }
 
@@ -226,8 +282,8 @@ export function Presentation ({ token, setTokenFunction }) {
       });
       setSlide(currentSlide);
     } catch (err) {
-      alert(err);
-      console.log(err);
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
     }
   }
 
@@ -250,13 +306,9 @@ export function Presentation ({ token, setTokenFunction }) {
       });
       setSlide(currentSlide);
     } catch (err) {
-      alert(err);
-      console.log(err);
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
     }
-  }
-
-  const updateTextFont = async () => {
-
   }
 
   const openPreview = () => {
@@ -274,16 +326,17 @@ export function Presentation ({ token, setTokenFunction }) {
       <LogoutButton token={token} setToken={setTokenFunction}/>
       <DashboardButton/>
       <DeletePresentationButton onClick={toggleModalDeletePres}/>
+      <DeleteSlideButton onClick={deleteSlide}/>
       <EditTitleButton onClick={toggleModalEditTitle}/>
       <NewSlideButton onClick={createNewSlide} presentationId={presentationId}/>
       <ViewPreviewButton onClick={openPreview}/>
       <ToolsMenu slide={slide} setSlide={setSlide}/>
       {notStartedNavigation
-        ? (<SlideCard slide={slide} deleteElement={deleteElement} updateElementContent={updateElementContent} updateTextFont={updateTextFont} />)
+        ? (<SlideCard slide={slide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} />)
         : (
         <Slide in={inProp} direction={direction}>
           <div>
-          <SlideCard slide={slide} deleteElement={deleteElement} updateElementContent={updateElementContent} updateTextFont={updateTextFont} />
+          <SlideCard slide={slide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} />
           </div>
         </Slide>
           )}
@@ -291,6 +344,8 @@ export function Presentation ({ token, setTokenFunction }) {
       {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} />}
       {slideIndex > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
       {slideIndex < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}
+      {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
+      {isModalErrorDeleteSlideVisible && <ErrorDeleteSlideModal onSubmit={deletePresentation} onClose={toggleModalErrorDeleteSlide} presentationId={presentationId} />}
     </>
   )
 }

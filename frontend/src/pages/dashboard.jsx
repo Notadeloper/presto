@@ -5,60 +5,69 @@ import { LogoutButton } from '../components/logoutButton.jsx';
 import { NewPresentationButton } from '../components/newPresentationButton';
 import { NewPresentationModal } from '../components/newPresentationModal';
 import { PresentationList } from '../components/presentationList';
+import { ErrorModal } from '../components/errorModal.jsx';
 import { v4 as uuidv4 } from 'uuid';
-
-const updateStore = async () => {
-  const token = localStorage.getItem('token');
-  try {
-    const response = await axios.get('http://localhost:5005/store', {
-      headers: {
-        Authorization: token,
-      }
-    });
-    const currentStore = response.data.store;
-    if (!currentStore.presentations) {
-      currentStore.presentations = {};
-    }
-    await axios.put('http://localhost:5005/store', { store: currentStore }, {
-      headers: {
-        Authorization: token,
-      }
-    });
-  } catch (err) {
-    alert(err.response.data.error);
-  }
-}
-
-const fetchData = async (setPresentations) => {
-  const token = localStorage.getItem('token');
-  await updateStore();
-  try {
-    const response = await axios.get('http://localhost:5005/store', {
-      headers: {
-        Authorization: token,
-      }
-    });
-    setPresentations([]);
-    const currentPresentations = response.data.store.presentations;
-    const presentationKeys = Object.keys(currentPresentations);
-    presentationKeys.reverse();
-
-    for (const key of presentationKeys) {
-      setPresentations(presentations => [...presentations, currentPresentations[key]]);
-    }
-  } catch (err) {
-    alert(err.response.data.error);
-  }
-}
 
 export function Dashboard ({ token, setTokenFunction }) {
   const navigate = useNavigate();
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [presentations, setPresentations] = React.useState([]);
+  const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
+  const [errorText, setErrorText] = React.useState('');
   if (token === null) {
     navigate('/login');
   }
 
-  const [isModalVisible, setIsModalVisible] = React.useState(false);
-  const [presentations, setPresentations] = React.useState([]);
+  const toggleModalError = () => {
+    setIsModalErrorVisible(!isModalErrorVisible);
+  };
+
+  const updateStore = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await axios.get('http://localhost:5005/store', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      const currentStore = response.data.store;
+      if (!currentStore.presentations) {
+        currentStore.presentations = {};
+      }
+      await axios.put('http://localhost:5005/store', { store: currentStore }, {
+        headers: {
+          Authorization: token,
+        }
+      });
+    } catch (err) {
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
+    }
+  }
+
+  const fetchData = async (setPresentations) => {
+    const token = localStorage.getItem('token');
+    await updateStore();
+    try {
+      const response = await axios.get('http://localhost:5005/store', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setPresentations([]);
+      const currentPresentations = response.data.store.presentations;
+      const presentationKeys = Object.keys(currentPresentations);
+      presentationKeys.reverse();
+
+      for (const key of presentationKeys) {
+        setPresentations(presentations => [...presentations, currentPresentations[key]]);
+      }
+    } catch (err) {
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
+    }
+  }
+
   React.useEffect(() => {
     fetchData(setPresentations);
   }, []);
@@ -101,8 +110,8 @@ export function Dashboard ({ token, setTokenFunction }) {
       });
       navigate(`/presentations/${newPresentation.id}`);
     } catch (err) {
-      console.log(err);
-      alert(err.response.data.error);
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
     }
   };
 
@@ -112,6 +121,7 @@ export function Dashboard ({ token, setTokenFunction }) {
     <NewPresentationButton onClick={toggleModal} />
     {isModalVisible && <NewPresentationModal onSubmit={addNewPresentation} onClose={toggleModal} />}
     <PresentationList presentations={presentations} />
+    {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
   </>;
 }
 
