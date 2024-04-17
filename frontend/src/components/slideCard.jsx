@@ -9,7 +9,8 @@ import hljs from 'highlight.js';
 import { Box } from '@mui/material';
 import { slideCardStyle, slideIndexStyle, elementsContainer } from '../styles/style.jsx';
 
-export function SlideCard ({ slide, slideIndex, deleteElement, updateElementContent }) {
+export function SlideCard ({ slide, slideIndex, deleteElement, updateElementContent, defaultBackgroundColor }) {
+  const [backgroundColor, setBackgroundColor] = React.useState('ffffff');
   if (!slide) {
     return <div>Loading slides...</div>;
   }
@@ -25,8 +26,14 @@ export function SlideCard ({ slide, slideIndex, deleteElement, updateElementCont
     updateElementContent(index, slide, newValue);
   };
 
+  if (slide.currentBackgroundColor !== null) {
+    setBackgroundColor(slide.currentBgColor);
+  } else if (defaultBackgroundColor !== null) {
+    setBackgroundColor(defaultBackgroundColor);
+  }
+
   return (
-    <Card sx={slideCardStyle}>
+    <Card sx={{ ...slideCardStyle, backgroundColor }}>
       <CardContent style={elementsContainer}>
         {slide.elements.map((slideElement, index) => {
           if (slideElement.elementType === 'text') {

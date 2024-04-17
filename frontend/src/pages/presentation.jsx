@@ -18,6 +18,8 @@ import { ToolsMenu } from '../components/toolsMenu.jsx';
 import { ErrorModal } from '../components/errorModal.jsx';
 import { ErrorDeleteSlideModal } from '../components/errorDeleteSlideModal.jsx';
 import { v4 as uuidv4 } from 'uuid';
+import { ThemePickerButton } from '../components/themePickerButton.jsx';
+import { ThemePickerModal } from '../components/themePickerModal.jsx';
 
 export function Presentation ({ token, setTokenFunction }) {
   const { presentationId } = useParams();
@@ -29,6 +31,7 @@ export function Presentation ({ token, setTokenFunction }) {
   const [isModalEditTitleVisible, setIsModalEditTitleVisible] = React.useState(false);
   const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
   const [isModalErrorDeleteSlideVisible, setIsModalErrorDeleteSlideVisible] = React.useState(false);
+  const [isModalThemePickerVisible, setIsModalThemePickerVisible] = React.useState(false);
   const [errorText, setErrorText] = React.useState('');
   const [inProp, setInProp] = React.useState(true);
   const [direction, setDirection] = React.useState('left');
@@ -55,7 +58,7 @@ export function Presentation ({ token, setTokenFunction }) {
     if (presentationId) {
       fetchPresentation();
     }
-  }, [presentationId]);
+  }, []);
 
   React.useEffect(() => {
     if (presentation?.slides?.length > slideIndex) {
@@ -77,6 +80,10 @@ export function Presentation ({ token, setTokenFunction }) {
 
   const toggleModalError = () => {
     setIsModalErrorVisible(!isModalErrorVisible);
+  };
+
+  const toggleModalThemePicker = () => {
+    setIsModalThemePickerVisible(!isModalThemePickerVisible);
   };
 
   const toggleModalErrorDeleteSlide = () => {
@@ -143,7 +150,8 @@ export function Presentation ({ token, setTokenFunction }) {
   const createNewSlide = async (presentationId) => {
     const newSlide = {
       id: uuidv4(),
-      elements: []
+      elements: [],
+      currentBgColor: null
     }
     try {
       const response = await axios.get('http://localhost:5005/store', {
@@ -316,6 +324,32 @@ export function Presentation ({ token, setTokenFunction }) {
     window.open(previewUrl, '_blank');
   }
 
+  const updateBackgroundColour = async (currentBackgroundColor, defaultBackgroundColor) => {
+    try {
+      const response = await axios.get('http://localhost:5005/store', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      const currentStore = response.data.store;
+      const currentPresentation = currentStore.presentations[presentationId];
+      currentPresentation.defaultBgColor = defaultBackgroundColor;
+      const currentSlide = currentPresentation.slides.find(s => s.id === slide.id);
+      currentSlide.currentBgColor = currentBackgroundColor;
+      await axios.put('http://localhost:5005/store', { store: currentStore }, {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setSlide(currentSlide);
+      setPresentation(currentPresentation);
+    } catch (err) {
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
+    }
+    console.log(currentBackgroundColor, defaultBackgroundColor);
+  }
+
   if (!presentation) {
     return <div>Loading Presentation...</div>;
   }
@@ -330,13 +364,14 @@ export function Presentation ({ token, setTokenFunction }) {
       <EditTitleButton onClick={toggleModalEditTitle}/>
       <NewSlideButton onClick={createNewSlide} presentationId={presentationId}/>
       <ViewPreviewButton onClick={openPreview}/>
+      <ThemePickerButton onClick={toggleModalThemePicker}/>
       <ToolsMenu slide={slide} setSlide={setSlide}/>
       {notStartedNavigation
-        ? (<SlideCard slide={slide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} />)
+        ? (<SlideCard slide={slide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} defaultBackgroundColor={presentation.defaultBgColor} />)
         : (
         <Slide in={inProp} direction={direction}>
           <div>
-          <SlideCard slide={slide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} />
+          <SlideCard slide={slide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} defaultBackgroundColor={presentation.defaultBgColor} />
           </div>
         </Slide>
           )}
@@ -344,6 +379,7 @@ export function Presentation ({ token, setTokenFunction }) {
       {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} />}
       {slideIndex > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
       {slideIndex < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}
+      {isModalThemePickerVisible && <ThemePickerModal onSubmit={updateBackgroundColour} onClose={toggleModalThemePicker}/>}
       {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
       {isModalErrorDeleteSlideVisible && <ErrorDeleteSlideModal onSubmit={deletePresentation} onClose={toggleModalErrorDeleteSlide} presentationId={presentationId} />}
     </>
