@@ -9,14 +9,23 @@ import hljs from 'highlight.js';
 import { Box } from '@mui/material';
 import { slideCardPreviewStyle, slideIndexStyle, elementsContainer, aceEditorStyle } from '../styles/style.jsx';
 
-export function SlideCardPreview ({ slide, slideIndex }) {
+export function SlideCardPreview ({ slide, slideIndex, defaultBackgroundColor }) {
+  const [backgroundColor, setBackgroundColor] = React.useState('ffffff');
+
+  React.useEffect(() => {
+    if (slide && slide.currentBgColor !== null) {
+      setBackgroundColor(slide.currentBgColor);
+    } else if (defaultBackgroundColor !== null) {
+      setBackgroundColor(defaultBackgroundColor);
+    }
+  }, [slide, defaultBackgroundColor]);
+
   if (!slide) {
     return <div>Loading slides...</div>;
   }
-  console.log(slide, slideIndex);
 
   return (
-    <Card sx={slideCardPreviewStyle}>
+    <Card sx={{ ...slideCardPreviewStyle, backgroundColor }}>
       <CardContent style={elementsContainer}>
         {slide.elements.map((slideElement, index) => {
           if (slideElement.elementType === 'text') {

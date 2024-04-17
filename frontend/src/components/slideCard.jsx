@@ -11,9 +11,6 @@ import { slideCardStyle, slideIndexStyle, elementsContainer } from '../styles/st
 
 export function SlideCard ({ slide, slideIndex, deleteElement, updateElementContent, defaultBackgroundColor }) {
   const [backgroundColor, setBackgroundColor] = React.useState('ffffff');
-  if (!slide) {
-    return <div>Loading slides...</div>;
-  }
 
   // This deletes the element if we right click
   const handleRightClick = (e, index, slide) => {
@@ -26,12 +23,17 @@ export function SlideCard ({ slide, slideIndex, deleteElement, updateElementCont
     updateElementContent(index, slide, newValue);
   };
 
-  if (slide.currentBackgroundColor !== null) {
-    setBackgroundColor(slide.currentBgColor);
-  } else if (defaultBackgroundColor !== null) {
-    setBackgroundColor(defaultBackgroundColor);
-  }
+  React.useEffect(() => {
+    if (slide && slide.currentBgColor !== null) {
+      setBackgroundColor(slide.currentBgColor);
+    } else if (defaultBackgroundColor !== null) {
+      setBackgroundColor(defaultBackgroundColor);
+    }
+  }, [slide, defaultBackgroundColor]);
 
+  if (!slide) {
+    return <div>Loading slides...</div>;
+  }
   return (
     <Card sx={{ ...slideCardStyle, backgroundColor }}>
       <CardContent style={elementsContainer}>
