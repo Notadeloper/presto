@@ -29,6 +29,14 @@ export const slideCardStyle = {
   padding: '0px'
 };
 
+export const slideCardPreviewStyle = {
+  width: 'calc(100vw - 48px)',
+  height: 'calc(100vh - 36.5px)',
+  margin: '0px',
+  padding: '0px'
+
+};
+
 export const modalStyle = {
   position: 'absolute',
   top: '50%',
@@ -58,4 +66,37 @@ export const elementsContainer = {
   height: '100%',
   padding: '0px',
   position: 'relative'
+}
+
+export const slideIndexStyle = {
+  position: 'absolute',
+  left: 0,
+  bottom: 0,
+  width: 50,
+  height: 50,
+  color: 'black',
+  opacity: 0.5,
+  fontSize: '1em',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 100000,
+  backgroundColor: 'rgba(255, 255, 255, 0.5)'
+}
+
+export const aceEditorStyle = {
+  width: '100%',
+  height: '100%',
+  userSelect: 'none',
+  pointerEvents: 'none'
+}
+
+export const previewFlexContainer = {
+  position: 'relative',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '100vh',
+  padding: '0px',
 }
