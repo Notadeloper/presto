@@ -14,6 +14,10 @@ export function PresentationList ({ presentations }) {
     navigate(`/presentations/${presentationId}/0`);
   };
 
+  if (!presentations) {
+    return <div>Loading presentations...</div>;
+  }
+
   return (
     <Box sx={flexContainerStyle}>
       {presentations.map((presentation) => (

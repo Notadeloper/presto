@@ -21,6 +21,10 @@ export function Preview ({ token, setTokenFunction }) {
   const [direction, setDirection] = React.useState('left');
   const [notStartedNavigation, setNotStartedNavigation] = React.useState(true);
 
+  if (token === null) {
+    navigate('/login');
+  }
+
   const toggleModalError = () => {
     setIsModalErrorVisible(!isModalErrorVisible);
   };

@@ -94,7 +94,7 @@ export function ToolsMenu ({ slide, setSlide }) {
   return (
     <div>
       <Button onClick={toggleToolbox(true)} aria-label="open toolbox">Open Toolbox</Button>
-      <Drawer open={open} onClose={toggleToolbox(false)}>
+      <Drawer open={open} onClose={toggleToolbox(false)} sx={{ zIndex: 100001 }}>
         {ToolboxList}
       </Drawer>
       {modalState.text && <AddTextModal onSubmit={addNewElement} onClose={() => toggleModal('text')} />}

@@ -23,7 +23,6 @@ export function Dashboard ({ token, setTokenFunction }) {
   };
 
   const updateStore = async () => {
-    const token = localStorage.getItem('token');
     try {
       const response = await axios.get('http://localhost:5005/store', {
         headers: {
@@ -46,7 +45,6 @@ export function Dashboard ({ token, setTokenFunction }) {
   }
 
   const fetchData = async (setPresentations) => {
-    const token = localStorage.getItem('token');
     await updateStore();
     try {
       const response = await axios.get('http://localhost:5005/store', {
