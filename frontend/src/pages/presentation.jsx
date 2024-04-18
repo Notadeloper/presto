@@ -145,7 +145,7 @@ export function Presentation ({ token, setTokenFunction }) {
       });
       setPresentation(prev => ({
         ...prev,
-        Thumbnail: presentationThumbnail
+        thumbnail: presentationThumbnail
       }));
     } catch (err) {
       alert(err);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Input, Box, Typography, Modal } from '@mui/material';
 import { modalStyle } from '../styles/style.jsx';
+import { fileToDataUrl } from '../helpers';
 
 export function EditThumbnailModal ({ onSubmit, onClose, presentationId }) {
   const [file, setFile] = React.useState(null);
@@ -15,12 +16,15 @@ export function EditThumbnailModal ({ onSubmit, onClose, presentationId }) {
     setFile(event.target.files[0]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (file) {
-      const formData = new FormData();
-      formData.append('thumbnail', file);
-      onSubmit(presentationId, formData);
+      try {
+        const data = await fileToDataUrl(file);
+        onSubmit(presentationId, { thumbnail: data });
+      } catch (error) {
+        console.error('Error converting file to data URL: ', error);
+      }
     }
     handleClose();
   };
