@@ -33,10 +33,13 @@ export function SlideCard ({ slide, slideIndex, deleteElement, updateElementCont
   if (!slide) {
     return <div>Loading slides...</div>;
   }
+
+  console.log('hi again')
   return (
     <Card sx={{ ...slideCardStyle, backgroundColor }}>
       <CardContent style={elementsContainer}>
         {slide.elements.map((slideElement, index) => {
+          console.log('slideElement.elementType = ', slideElement.elementType);
           if (slideElement.elementType === 'text') {
             return (
               <textarea
@@ -92,6 +95,26 @@ export function SlideCard ({ slide, slideIndex, deleteElement, updateElementCont
                   style={{ width: '100%', height: '100%' }}
                 />
               </div>
+            );
+          } else if (slideElement.elementType === 'image') {
+            // Rendering image elements
+            console.log('Image source: ', slideElement);
+            return (
+              <img
+                key={index}
+                src={slideElement.image}
+                alt={slideElement.imageDescription}
+                style={{
+                  position: 'absolute',
+                  top: `${slideElement.imagePosition.y}%`,
+                  left: `${slideElement.imagePosition.x}%`,
+                  height: `${slideElement.imageSize.height}%`,
+                  width: `${slideElement.imageSize.width}%`,
+                  zIndex: index,
+                  border: '1px solid lightgrey'
+                }}
+                onContextMenu={(event) => handleRightClick(event, index, slide)}
+              />
             );
           }
           return null;
