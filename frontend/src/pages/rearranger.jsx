@@ -7,8 +7,6 @@ import { ErrorModal } from '../components/errorModal.jsx';
 export function Rearranger ({ token, setTokenFunction }) {
   const navigate = useNavigate();
   const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
-  // const [errorText, setErrorText] = React.useState('');
-  // const [slides, setSlides] = React.useState([]);
   if (token === null) {
     navigate('/login');
   }
