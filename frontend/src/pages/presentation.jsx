@@ -415,11 +415,11 @@ export function Presentation ({ token, setTokenFunction }) {
       <SlideRearrangeButton onClick={openRearrange}/>
       <ToolsMenu slide={slide} setSlide={setSlide}/>
       {notStartedNavigation
-        ? (<SlideCard slide={slide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} defaultBackgroundColor={presentation.defaultBgColor} />)
+        ? (<SlideCard slide={slide} setSlide={setSlide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} defaultBackgroundColor={presentation.defaultBgColor} />)
         : (
         <Slide in={inProp} direction={direction}>
           <div>
-          <SlideCard slide={slide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} defaultBackgroundColor={presentation.defaultBgColor} />
+          <SlideCard slide={slide} setSlide={setSlide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} defaultBackgroundColor={presentation.defaultBgColor} />
           </div>
         </Slide>
           )}

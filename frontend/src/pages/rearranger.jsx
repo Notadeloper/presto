@@ -10,8 +10,6 @@ export function Rearranger ({ token, setTokenFunction }) {
   const navigate = useNavigate();
   const { presentationId } = useParams();
   const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
-  const [errorText, setErrorText] = React.useState('');
-  const [presentation, setPresentation] = React.useState(null);
   if (token === null) {
     navigate('/login');
   }
