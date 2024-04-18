@@ -27,29 +27,26 @@ export function AddImageModal ({ onSubmit, onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (imageFile) {
-      try {
-        const image = await fileToDataUrl(imageFile);
-        const newImageElement = {
-          imageSize,
-          image,
-          imageDescription
-        };
-        if (Number(imageSize.width) > 0 && Number(imageSize.height) > 0) {
-          onSubmit(newImageElement);
-          handleClose();
-        } else {
-          setErrorText('Please enter valid image dimensions.');
-          toggleModalError(!isModalErrorVisible);
-        }
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        setErrorText(error.message || 'Error processing the image file.');
-        toggleModalError(!isModalErrorVisible);
+    const image = await fileToDataUrl(imageFile);
+    const newImageElement = {
+      elementType: 'image',
+      imageSize,
+      image,
+      imageDescription,
+      imagePosition: {
+        x: 0,
+        y: 0
       }
+    };
+    if (Number(imageSize.width) > 0 && Number(imageSize.height) > 0) {
+      onSubmit(newImageElement);
+      console.log('hi');
+      handleClose();
+    } else {
+      setErrorText('Please enter valid image dimensions.');
+      toggleModalError(!isModalErrorVisible);
     }
-  };
+  }
 
   return (
     <>
