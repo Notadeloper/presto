@@ -21,7 +21,7 @@ export function EditThumbnailModal ({ onSubmit, onClose, presentationId }) {
     if (file) {
       try {
         const data = await fileToDataUrl(file);
-        onSubmit(presentationId, { thumbnail: data });
+        onSubmit(presentationId, data);
       } catch (error) {
         console.error('Error converting file to data URL: ', error);
       }
