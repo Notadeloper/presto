@@ -24,10 +24,10 @@ export function AddCodeModal ({ onSubmit, onClose }) {
     e.preventDefault(); // Stops default submitting of form
     const newCodeElement = {
       elementType: 'code',
-      codeSize,
+      size: codeSize,
       fontSize,
       elementContent,
-      codePosition: {
+      position: {
         x: 0,
         y: 0
       }

@@ -315,6 +315,20 @@ export function Presentation ({ token, setTokenFunction }) {
   }
 
   const deleteElement = async (elementIndex, slide) => {
+    let retries = 0;
+    const maxRetries = 10;
+    let loadedSlide = slide;
+
+    while (!loadedSlide || !loadedSlide.id) {
+      if (retries >= maxRetries) {
+        setErrorText('Failed to load slide data. Please try again later.');
+        toggleModalError(true);
+        return;
+      }
+      await new Promise(resolve => setTimeout(resolve, 500));
+      retries++;
+      loadedSlide = slide;
+    }
     try {
       const response = await axios.get('http://localhost:5005/store', {
         headers: {
@@ -323,7 +337,8 @@ export function Presentation ({ token, setTokenFunction }) {
       });
       const currentStore = response.data.store;
       const currentPresentations = currentStore.presentations;
-      const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
+      const slideId = slide.id;
+      const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slideId);
       currentSlide.elements = currentSlide.elements.filter((_, index) => index !== elementIndex);
       await axios.put('http://localhost:5005/store', { store: currentStore }, {
         headers: {
