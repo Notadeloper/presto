@@ -179,7 +179,8 @@ export function Presentation ({ token, setTokenFunction }) {
         thumbnail: presentationThumbnail
       }));
     } catch (err) {
-      alert(err);
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
     }
   };
 
@@ -418,7 +419,7 @@ export function Presentation ({ token, setTokenFunction }) {
           )}
       {isModalDeletePresVisible && <DeletePresentationModal onSubmit={deletePresentation} onClose={toggleModalDeletePres} presentationId={presentationId} />}
       {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} />}
-      {isModalEditTitleVisible && <EditThumbnailModal onSubmit={editPresentationThumbnail} onClose={toggleModalEditThumbnail} presentationId={presentationId} />}
+      {isModalEditThumbnailVisible && <EditThumbnailModal onSubmit={editPresentationThumbnail} onClose={toggleModalEditThumbnail} presentationId={presentationId} />}
       {Number(slideIndex) > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
       {Number(slideIndex) < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}
       {isModalThemePickerVisible && <ThemePickerModal onSubmit={updateBackgroundColour} onClose={toggleModalThemePicker}/>}
