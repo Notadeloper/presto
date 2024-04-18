@@ -37,6 +37,10 @@ export function Presentation ({ token, setTokenFunction }) {
   const [direction, setDirection] = React.useState('left');
   const [notStartedNavigation, setNotStartedNavigation] = React.useState(true);
 
+  if (token === null) {
+    navigate('/login');
+  }
+
   localStorage.setItem('currentPresentationId', presentationId);
 
   React.useEffect(() => {

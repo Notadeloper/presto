@@ -5,7 +5,7 @@ import { Register } from './pages/register.jsx';
 import { Dashboard } from './pages/dashboard.jsx';
 import { Presentation } from './pages/presentation.jsx';
 import { Preview } from './pages/preview.jsx';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Rearranger } from './pages/rearranger.jsx'
 
 function App () {
   let lsToken = null;
@@ -28,6 +28,7 @@ function App () {
           <Route path="/dashboard" element={<Dashboard token={token} setTokenFunction={setTokenAbstract}/>} />
           <Route path="/presentations/:presentationId/:urlSlideIndex" element={<Presentation token={token} setTokenFunction={setTokenAbstract}/>}/>
           <Route path="/presentations/:presentationId/:urlSlideIndex/preview/" element={<Preview token={token} setTokenFunction={setTokenAbstract}/>}/>
+          <Route path="/presentations-rearrange/:presentationId" element={<Rearranger token={token} setTokenFunction={setTokenAbstract}/>}/>
         </Routes>
       </BrowserRouter>
     </>
