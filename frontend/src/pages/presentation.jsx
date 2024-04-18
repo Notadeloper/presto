@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Slide } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { LogoutButton } from '../components/logoutButton.jsx';
 import { DashboardButton } from '../components/dashboardButton.jsx';
@@ -30,6 +31,7 @@ export function Presentation ({ token, setTokenFunction }) {
   const [slideIndex, setSlideIndex] = React.useState(Number(urlSlideIndex));
   const [isModalDeletePresVisible, setIsModalDeletePresVisible] = React.useState(false);
   const [isModalEditTitleVisible, setIsModalEditTitleVisible] = React.useState(false);
+  const [isModalEditThumbnailVisible, setIsModalEditThumbnailVisible] = React.useState(false);
   const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
   const [isModalErrorDeleteSlideVisible, setIsModalErrorDeleteSlideVisible] = React.useState(false);
   const [isModalThemePickerVisible, setIsModalThemePickerVisible] = React.useState(false);
@@ -412,6 +414,7 @@ export function Presentation ({ token, setTokenFunction }) {
           )}
       {isModalDeletePresVisible && <DeletePresentationModal onSubmit={deletePresentation} onClose={toggleModalDeletePres} presentationId={presentationId} />}
       {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} />}
+      {isModalEditTitleVisible && <EditThumbnailModal onSubmit={editPresentationThumbnail} onClose={toggleModalEditThumbnail} presentationId={presentationId} />}
       {Number(slideIndex) > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
       {Number(slideIndex) < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}
       {isModalThemePickerVisible && <ThemePickerModal onSubmit={updateBackgroundColour} onClose={toggleModalThemePicker}/>}
