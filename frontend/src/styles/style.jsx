@@ -6,9 +6,11 @@ export const thisIsADivWrapperStyle = {
 
 export const flexContainerStyle = {
   display: 'flex',
+  flexDirection: 'row',
   flexWrap: 'wrap',
-  justifyContent: 'space-around',
-  alignItems: 'stretch'
+  justifyContent: 'flex-between',
+  alignItems: 'center',
+  rowGap: '10px',
 };
 
 export const presentationCardStyle = {
@@ -17,6 +19,16 @@ export const presentationCardStyle = {
   margin: '8px',
   borderRadius: '10px',
   aspectRatio: '2 / 1',
+  display: 'flex',
+  flexDirection: 'column',
+  cursor: 'pointer'
+};
+
+export const slideRearrangeCardStyle = {
+  flex: 'none',
+  width: '170px',
+  height: '85px',
+  borderRadius: '0px',
   display: 'flex',
   flexDirection: 'column',
   cursor: 'pointer'
@@ -34,7 +46,6 @@ export const slideCardPreviewStyle = {
   height: 'calc(100vh - 36.5px)',
   margin: '0px',
   padding: '0px'
-
 };
 
 export const modalStyle = {
