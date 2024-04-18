@@ -22,6 +22,7 @@ import { ErrorDeleteSlideModal } from '../components/errorDeleteSlideModal.jsx';
 import { v4 as uuidv4 } from 'uuid';
 import { ThemePickerButton } from '../components/themePickerButton.jsx';
 import { ThemePickerModal } from '../components/themePickerModal.jsx';
+import { SlideRearrangeButton } from '../components/slideRearrangeButton.jsx';
 
 export function Presentation ({ token, setTokenFunction }) {
   const { presentationId, urlSlideIndex } = useParams();
@@ -365,6 +366,10 @@ export function Presentation ({ token, setTokenFunction }) {
     window.open(previewUrl, '_blank');
   }
 
+  const openRearrange = () => {
+    navigate(`/presentations-rearrange/${presentationId}`);
+  }
+
   const updateBackgroundColour = async (currentBackgroundColor, defaultBackgroundColor) => {
     try {
       const response = await axios.get('http://localhost:5005/store', {
@@ -407,6 +412,7 @@ export function Presentation ({ token, setTokenFunction }) {
       <NewSlideButton onClick={createNewSlide} presentationId={presentationId}/>
       <ViewPreviewButton onClick={openPreview}/>
       <ThemePickerButton onClick={toggleModalThemePicker}/>
+      <SlideRearrangeButton onClick={openRearrange}/>
       <ToolsMenu slide={slide} setSlide={setSlide}/>
       {notStartedNavigation
         ? (<SlideCard slide={slide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} defaultBackgroundColor={presentation.defaultBgColor} />)
