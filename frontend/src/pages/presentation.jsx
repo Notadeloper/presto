@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import { Slide } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { LogoutButton } from '../components/logoutButton.jsx';
 import { DashboardButton } from '../components/dashboardButton.jsx';
@@ -9,6 +8,8 @@ import { DeletePresentationModal } from '../components/deletePresentationModal.j
 import { SlideCard } from '../components/slideCard.jsx';
 import { EditTitleButton } from '../components/editTitleButton.jsx';
 import { EditTitleModal } from '../components/editTitleModal.jsx';
+import { EditThumbnailButton } from '../components/editThumbnailButton.jsx';
+import { EditThumbnailModal } from '../components/editThumbnailModal.jsx';
 import { NewSlideButton } from '../components/newSlideButton.jsx';
 import { SlideLeftButton } from '../components/slideLeftButton.jsx';
 import { SlideRightButton } from '../components/slideRightButton.jsx';
@@ -144,6 +145,35 @@ export function Presentation ({ token, setTokenFunction }) {
     } catch (err) {
       setErrorText(err.response.data.error);
       toggleModalError(!isModalErrorVisible);
+    }
+  };
+
+  const toggleModalEditThumbnail = () => {
+    setIsModalEditThumbnailVisible(!isModalEditThumbnailVisible);
+  };
+
+  const editPresentationThumbnail = async (presentationId, presentationThumbnail) => {
+    try {
+      const response = await axios.get('http://localhost:5005/store', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      const currentStore = response.data.store;
+      const currentPresentations = currentStore.presentations;
+      currentPresentations[presentationId].thumbnail = presentationThumbnail;
+
+      await axios.put('http://localhost:5005/store', { store: currentStore }, {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setPresentation(prev => ({
+        ...prev,
+        thumbnail: presentationThumbnail
+      }));
+    } catch (err) {
+      alert(err);
     }
   };
 
@@ -366,6 +396,7 @@ export function Presentation ({ token, setTokenFunction }) {
       <DeletePresentationButton onClick={toggleModalDeletePres}/>
       <DeleteSlideButton onClick={deleteSlide}/>
       <EditTitleButton onClick={toggleModalEditTitle}/>
+      <EditThumbnailButton onClick={toggleModalEditThumbnail}/>
       <NewSlideButton onClick={createNewSlide} presentationId={presentationId}/>
       <ViewPreviewButton onClick={openPreview}/>
       <ThemePickerButton onClick={toggleModalThemePicker}/>
