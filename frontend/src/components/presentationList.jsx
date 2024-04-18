@@ -24,12 +24,22 @@ export function PresentationList ({ presentations }) {
         <Card key={presentation.id} sx={presentationCardStyle}>
           <CardActionArea sx={{ height: '100%' }} onClick={() => handlePresentationClick(presentation.id)}>
             <CardContent sx={{ flexGrow: 1 }}>
-              <img src={presentation.thumbnail} alt={presentation.title} style={{ width: '100%', height: 'auto', marginBottom: '10px' }} />
+              <img
+                src={presentation.thumbnail}
+                alt={presentation.title}
+                style={{
+                  width: 'auto',
+                  height: '100px',
+                  marginBottom: '10px',
+                  backgroundColor: presentation.thumbnail ? 'transparent' : 'grey',
+                  display: 'block'
+                }}
+              />
               <Typography variant="h5" component="div" sx={{ wordWrap: 'break-word' }}>
                 {presentation.title}
               </Typography>
               <Typography variant="body2">
-                {presentation.slides.length}
+                Slides: {presentation.slides.length}
               </Typography>
             </CardContent>
           </CardActionArea>
