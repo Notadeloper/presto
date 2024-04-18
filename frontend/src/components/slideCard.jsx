@@ -7,12 +7,15 @@ import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-monokai';
 import 'ace-builds/webpack-resolver';
 import hljs from 'highlight.js';
-import { Box } from '@mui/material';
 import Draggable from 'react-draggable';
+import { Box } from '@mui/material';
 import { slideCardStyle, slideIndexStyle, elementsContainer } from '../styles/style.jsx';
 import { EditCodeModal } from '../components/editCodeModal.jsx';
+import { EditImageModal } from './editImageModal.jsx';
+import { EditVideoModal } from './editVideoModal.jsx'
 import { EditTextModal } from '../components/editTextModal.jsx';
 import { ErrorModal } from '../components/errorModal.jsx';
+import { CornerBox } from './cornerBox.jsx';
 
 export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateElementContent, defaultBackgroundColor }) {
   const [backgroundColor, setBackgroundColor] = React.useState('ffffff');
@@ -21,8 +24,11 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
   const [cardContentSize, setCardContentSize] = React.useState({ width: 0, height: 0 });
   const [dragEnabled, setDragEnabled] = React.useState(true);
   const [isModalEditTextVisible, setIsModalEditTextVisible] = React.useState(false);
+  const [isModalEditImageVisible, setIsModalEditImageVisible] = React.useState(false);
+  const [isModalEditVideoVisible, setIsModalEditVideoVisible] = React.useState(false);
   const [isModalEditCodeVisible, setIsModalEditCodeVisible] = React.useState(false);
   const [elementIndex, setElementIndex] = React.useState(null);
+  const [activeOverlay, setActiveOverlay] = React.useState(null);
   const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
   const [errorText, setErrorText] = React.useState('');
 
@@ -45,16 +51,46 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
   };
 
   const toggleDraggable = (index) => {
+    console.log(draggable[index]);
     if (!dragEnabled) return;
 
     setDraggable((prevDraggable) =>
       prevDraggable.map((isDraggable, i) => (i === index ? !isDraggable : isDraggable))
     );
+    console.log(draggable[index]);
+  };
+
+  const handleMouseEnter = (index) => {
+    setActiveOverlay(index);
+  };
+
+  const handleMouseLeave = () => {
+    setActiveOverlay(null);
   };
 
   const handleDoubleClickText = (index) => {
     setElementIndex(index);
     toggleEditTextModal();
+    setDragEnabled(false);
+    setDraggable(Array(slide.elements.length).fill(false));
+    setTimeout(() => {
+      setDragEnabled(true);
+    }, 500);
+  };
+
+  const handleDoubleClickImage = (index) => {
+    setElementIndex(index);
+    toggleEditImageModal();
+    setDragEnabled(false);
+    setDraggable(Array(slide.elements.length).fill(false));
+    setTimeout(() => {
+      setDragEnabled(true);
+    }, 500);
+  };
+
+  const handleDoubleClickVideo = (index) => {
+    setElementIndex(index);
+    toggleEditVideoModal();
     setDragEnabled(false);
     setDraggable(Array(slide.elements.length).fill(false));
     setTimeout(() => {
@@ -79,7 +115,7 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
       setBackgroundColor(defaultBackgroundColor);
     }
     if (slide) {
-      setDraggable(Array(slide.elements.length).fill(true));
+      setDraggable(Array(slide.elements.length).fill(false));
     }
   }, [slide, defaultBackgroundColor]);
 
@@ -107,6 +143,14 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
     setIsModalEditTextVisible(!isModalEditTextVisible);
   }
 
+  const toggleEditImageModal = () => {
+    setIsModalEditImageVisible(!isModalEditImageVisible);
+  }
+
+  const toggleEditVideoModal = () => {
+    setIsModalEditVideoVisible(!isModalEditVideoVisible);
+  }
+
   const toggleEditCodeModal = () => {
     setIsModalEditCodeVisible(!isModalEditCodeVisible);
   }
@@ -126,6 +170,56 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
       currentElement.fontFamily = newElementInfo.fontFamily;
       currentElement.fontSize = newElementInfo.fontSize;
       currentElement.textColor = newElementInfo.textColor;
+      await axios.put('http://localhost:5005/store', { store: currentStore }, {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setSlide(currentSlide);
+    } catch (err) {
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
+    }
+  }
+
+  const updateImageElement = async (newElementInfo, index) => {
+    try {
+      const response = await axios.get('http://localhost:5005/store', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      const currentStore = response.data.store;
+      const currentPresentations = currentStore.presentations;
+      const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
+      const currentElement = currentSlide.elements[index];
+      currentElement.image = newElementInfo.image;
+      currentElement.imageDescription = newElementInfo.imageDescription;
+      await axios.put('http://localhost:5005/store', { store: currentStore }, {
+        headers: {
+          Authorization: token,
+        }
+      });
+      setSlide(currentSlide);
+    } catch (err) {
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
+    }
+  }
+
+  const updateVideoElement = async (newElementInfo, index) => {
+    try {
+      const response = await axios.get('http://localhost:5005/store', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      const currentStore = response.data.store;
+      const currentPresentations = currentStore.presentations;
+      const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
+      const currentElement = currentSlide.elements[index];
+      currentElement.videoUrl = newElementInfo.videoUrl;
+      currentElement.videoAutoplay = newElementInfo.videoAutoplay;
       await axios.put('http://localhost:5005/store', { store: currentStore }, {
         headers: {
           Authorization: token,
@@ -163,7 +257,6 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
     }
   }
 
-  console.log(cardContentSize.width, cardContentSize.height);
   return (
     <>
       <Card sx={{ ...slideCardStyle, backgroundColor }}>
@@ -172,29 +265,45 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
             let elementContent;
             if (slideElement.elementType === 'text') {
               elementContent = (
-                <textarea
-                  key={index}
-                  value={slideElement.elementContent}
-                  onChange={(e) => handleChange(e.target.value, index, slide)}
-                  onDoubleClick={() => handleDoubleClickText(index)}
+                <div
                   style={{
                     position: 'absolute',
-                    top: `${slideElement.textPosition.y}%`,
-                    left: `${slideElement.textPosition.x}%`,
-                    height: `${(cardContentSize.height * slideElement.textSize.height) / 100}px`,
-                    width: `${(cardContentSize.width * slideElement.textSize.width) / 100}px`,
-                    fontSize: `${slideElement.fontSize}em`,
-                    fontFamily: slideElement.fontFamily,
-                    color: `#${slideElement.textColor}`,
-                    overflow: 'hidden',
-                    resize: 'none',
-                    textAlign: 'left',
-                    border: '1px solid lightgrey',
+                    top: `${slideElement.position.y}%`,
+                    left: `${slideElement.position.x}%`,
+                    height: `${(cardContentSize.height * slideElement.size.height) / 100}px`,
+                    width: `${(cardContentSize.width * slideElement.size.width) / 100}px`,
                     zIndex: index,
-                    backgroundColor: 'transparent'
                   }}
+                  onClick={() => toggleDraggable(index)}
+                  onDoubleClick={() => handleDoubleClickText(index)}
                   onContextMenu={(event) => handleRightClick(event, index, slide)}
-                />
+                >
+                  <textarea
+                    value={slideElement.elementContent}
+                    onChange={(e) => handleChange(e.target.value, index, slide)}
+                    style={{
+                      position: 'relative',
+                      height: '100%',
+                      width: '100%',
+                      fontSize: `${slideElement.fontSize}em`,
+                      fontFamily: slideElement.fontFamily,
+                      color: `#${slideElement.textColor}`,
+                      overflow: 'hidden',
+                      resize: 'none',
+                      textAlign: 'left',
+                      border: '1px solid lightgrey',
+                      backgroundColor: 'transparent'
+                    }}
+                  />
+                  {draggable[index] && (
+                    <>
+                      <CornerBox style={{ top: '-2.5px', left: '-2.5px' }} />
+                      <CornerBox style={{ top: '-2.5px', right: '-2.5px' }} />
+                      <CornerBox style={{ bottom: '-2.5px', left: '-2.5px' }} />
+                      <CornerBox style={{ bottom: '-2.5px', right: '-2.5px' }} />
+                    </>
+                  )}
+                </div>
               );
             } else if (slideElement.elementType === 'code') {
               const codeLanguage = hljs.highlightAuto(slideElement.elementContent, ['c', 'javascript', 'python']).language || 'javascript';
@@ -202,12 +311,13 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
                 <div
                   key={index}
                   onDoubleClick={() => handleDoubleClickCode(index)}
+                  onClick={() => toggleDraggable(index)}
                   style={{
                     position: 'absolute',
-                    top: `${slideElement.codePosition.y}%`,
-                    left: `${slideElement.codePosition.x}%`,
-                    height: `${(cardContentSize.height * slideElement.codeSize.height) / 100}px`,
-                    width: `${(cardContentSize.width * slideElement.codeSize.width) / 100}px`,
+                    top: `${slideElement.position.y}%`,
+                    left: `${slideElement.position.x}%`,
+                    height: `${(cardContentSize.height * slideElement.size.height) / 100}px`,
+                    width: `${(cardContentSize.width * slideElement.size.width) / 100}px`,
                     zIndex: index
                   }}
                   onContextMenu={(event) => handleRightClick(event, index, slide)}
@@ -226,14 +336,116 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
                     }}
                     style={{ width: '100%', height: '100%' }}
                   />
+                  {draggable[index] && (
+                    <>
+                      <CornerBox style={{ top: '-2.5px', left: '-2.5px' }} />
+                      <CornerBox style={{ top: '-2.5px', right: '-2.5px' }} />
+                      <CornerBox style={{ bottom: '-2.5px', left: '-2.5px' }} />
+                      <CornerBox style={{ bottom: '-2.5px', right: '-2.5px' }} />
+                    </>
+                  )}
                 </div>
               );
+            } else if (slideElement.elementType === 'image') {
+              elementContent = (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: `${slideElement.position.y}%`,
+                    left: `${slideElement.position.x}%`,
+                    height: `${(cardContentSize.height * slideElement.size.height) / 100}px`,
+                    width: `${(cardContentSize.width * slideElement.size.width) / 100}px`,
+                    zIndex: index,
+                  }}
+                  onDoubleClick={() => handleDoubleClickImage(index)}
+                  onClick={() => toggleDraggable(index)}
+                  onContextMenu={(event) => handleRightClick(event, index, slide)}
+                >
+                  <img
+                    draggable="false"
+                    src={slideElement.image}
+                    alt={slideElement.imageDescription}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                    }}
+                  />
+                  {draggable[index] && (
+                    <>
+                      <CornerBox style={{ top: '-2.5px', left: '-2.5px' }} />
+                      <CornerBox style={{ top: '-2.5px', right: '-2.5px' }} />
+                      <CornerBox style={{ bottom: '-2.5px', left: '-2.5px' }} />
+                      <CornerBox style={{ bottom: '-2.5px', right: '-2.5px' }} />
+                    </>
+                  )}
+                </div>
+              );
+            } else if (slideElement.elementType === 'video') {
+              elementContent = (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: `${slideElement.position.y}%`,
+                    left: `${slideElement.position.x}%`,
+                    height: `${(cardContentSize.height * slideElement.size.height) / 100}px`,
+                    width: `${(cardContentSize.width * slideElement.size.width) / 100}px`,
+                    zIndex: index,
+                  }}
+                  onMouseEnter={() => handleMouseEnter(index)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <iframe
+                    src={slideElement.videoUrl}
+                    autoPlay={slideElement.videoAutoplay}
+                    height={`${(cardContentSize.height * slideElement.size.height) / 100}px`}
+                    width={`${(cardContentSize.width * slideElement.size.width) / 100}px`}
+                    onContextMenu={(event) => handleRightClick(event, index, slide)}
+                  />
+                  {draggable[index] && (
+                    <>
+                      <CornerBox style={{ top: '-2.5px', left: '-2.5px' }} />
+                      <CornerBox style={{ top: '-2.5px', right: '-2.5px' }} />
+                      <CornerBox style={{ bottom: '-2.5px', left: '-2.5px' }} />
+                      <CornerBox style={{ bottom: '-2.5px', right: '-2.5px' }} />
+                    </>
+                  )}
+                  {activeOverlay === index && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        width: '100%',
+                        height: '20%',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                      onDoubleClick={() => handleDoubleClickVideo(index)}
+                      onClick={() => toggleDraggable(index)}
+                      onContextMenu={(event) => handleRightClick(event, index, slide)}
+                    >
+                      Click here to interact with the video!
+                    </div>
+                  )}
+                </div>
+              );
+            }
+            let bounds = { left: 0, top: 0, right: 0, bottom: 0 };
+            if (cardContentRef.current && cardContentSize && slideElement) {
+              bounds = {
+                left: 0,
+                top: 0,
+                right: cardContentRef.current.offsetWidth - (cardContentSize.width * (slideElement.size.width / 100)),
+                bottom: cardContentRef.current.offsetHeight - (cardContentSize.height * (slideElement.size.height / 100))
+              };
             }
             return (
               <Draggable
                 key={index}
                 disabled={!draggable[index]}
-                bounds="parent"
+                bounds={bounds}
               >
                 <div
                   onDoubleClick={() => toggleDraggable(index)}
@@ -251,6 +463,8 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
         </CardContent>
       </Card>
       {isModalEditTextVisible && <EditTextModal onSubmit={updateTextElement} onClose={toggleEditTextModal} index={elementIndex}/>}
+      {isModalEditImageVisible && <EditImageModal onSubmit={updateImageElement} onClose={toggleEditImageModal} index={elementIndex}/>}
+      {isModalEditVideoVisible && <EditVideoModal onSubmit={updateVideoElement} onClose={toggleEditVideoModal} index={elementIndex}/>}
       {isModalEditCodeVisible && <EditCodeModal onSubmit={updateCodeElement} onClose={toggleEditCodeModal} index={elementIndex}/>}
       {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
     </>

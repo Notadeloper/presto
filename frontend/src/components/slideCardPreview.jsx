@@ -38,8 +38,8 @@ export function SlideCardPreview ({ slide, slideIndex, defaultBackgroundColor })
                   position: 'absolute',
                   top: `${slideElement.textPosition.y}%`,
                   left: `${slideElement.textPosition.x}%`,
-                  height: `${slideElement.textSize.height}%`,
-                  width: `${slideElement.textSize.width}%`,
+                  height: `${slideElement.size.height}%`,
+                  width: `${slideElement.size.width}%`,
                   fontSize: `${slideElement.fontSize}em`,
                   fontFamily: slideElement.fontFamily,
                   color: `#${slideElement.textColor}`,
@@ -63,8 +63,8 @@ export function SlideCardPreview ({ slide, slideIndex, defaultBackgroundColor })
                   position: 'absolute',
                   top: `${slideElement.codePosition.y}%`,
                   left: `${slideElement.codePosition.x}%`,
-                  height: `${slideElement.codeSize.height}%`,
-                  width: `${slideElement.codeSize.width}%`,
+                  height: `${slideElement.size.height}%`,
+                  width: `${slideElement.size.width}%`,
                   zIndex: index
                 }}
               >

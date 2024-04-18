@@ -29,12 +29,12 @@ export function AddTextModal ({ onSubmit, onClose }) {
     e.preventDefault(); // Stops default submitting of form
     const newTextElement = {
       elementType: 'text',
-      textSize,
+      size: textSize,
       fontSize,
       fontFamily,
       textColor,
       elementContent,
-      textPosition: {
+      position: {
         x: 0,
         y: 0
       }

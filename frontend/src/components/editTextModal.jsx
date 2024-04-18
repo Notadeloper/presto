@@ -93,7 +93,7 @@ export function EditTextModal ({ onSubmit, onClose, index }) {
             required
           />
           <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button type="submit">Create</Button>
+            <Button type="submit">Edit</Button>
             <Button onClick={handleClose}>Cancel</Button>
           </Box>
         </Box>
