@@ -4,7 +4,7 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd';
 
 export function NewSlideButton ({ onClick, presentationId }) {
   return (
-    <Button onClick={() => onClick(presentationId)} variant="contained" endIcon={<NoteAddIcon />} aria-label="new slide" size='small'>
+    <Button onClick={() => onClick(presentationId)} variant="contained" endIcon={<NoteAddIcon />} aria-label="new slide" size='small' color='quaternary'>
       New Slide
     </Button>
   )

@@ -23,8 +23,8 @@ export function ErrorDeleteSlideModal ({ onSubmit, onClose, presentationId }) {
           This is the last slide left in the presentation! Delete presentation instead?
         </Typography>
         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <Button type="submit" variant="contained" color="error">Delete Presentation</Button>
-          <Button onClick={handleClose}>Close Error</Button>
+          <Button type="submit" variant="contained" color="error" sx={{ color: '#957dad' }}>Delete Presentation</Button>
+          <Button onClick={handleClose} sx={{ color: '#957dad' }}>Close Error</Button>
         </Box>
       </Box>
     </Modal>
