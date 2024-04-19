@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export function DashboardButton ({ token, setToken }) {
-  const belowWidth = useMediaQuery('(max-width:700px)');
+  const belowWidth = useMediaQuery('(max-width:680px)');
   const navigate = useNavigate(); // Get the navigate function
 
   const goToDashboard = () => {

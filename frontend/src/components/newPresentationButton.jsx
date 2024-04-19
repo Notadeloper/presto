@@ -4,7 +4,7 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export function NewPresentationButton ({ onClick }) {
-  const belowWidth = useMediaQuery('(max-width:700px)');
+  const belowWidth = useMediaQuery('(max-width:680px)');
 
   return (
     <Box style={{ display: 'flex', justifyContent: 'center', margin: '20px 0 20px 0' }}>

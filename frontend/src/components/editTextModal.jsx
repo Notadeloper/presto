@@ -46,7 +46,7 @@ export function EditTextModal ({ onSubmit, onClose, index }) {
 
   return (
     <>
-      <Modal open={open} onClose={handleClose} aria-labelledby="modal-title" sx={{ zIndex: 1000002 }}>
+      <Modal open={open} onClose={handleClose} aria-labelledby="modal-title">
         <Box sx={modalStyle} component="form" onSubmit={handleSubmit}>
           <Typography id="modal-title" variant="h6" component="h2">
             Edit Text Box
@@ -124,8 +124,8 @@ export function EditTextModal ({ onSubmit, onClose, index }) {
             required
           />
           <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button type="submit">Edit</Button>
-            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" sx={{ color: 'black' }}>Edit</Button>
+            <Button onClick={handleClose} sx={{ color: 'black' }}>Cancel</Button>
           </Box>
         </Box>
       </Modal>

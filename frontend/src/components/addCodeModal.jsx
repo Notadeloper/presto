@@ -100,8 +100,8 @@ export function AddCodeModal ({ onSubmit, onClose }) {
             required
           />
           <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button type="submit">Create</Button>
-            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" sx={{ color: 'black' }}>Create</Button>
+            <Button onClick={handleClose} sx={{ color: 'black' }}>Cancel</Button>
           </Box>
         </Box>
       </Modal>

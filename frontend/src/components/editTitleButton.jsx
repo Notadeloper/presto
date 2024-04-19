@@ -4,7 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export function EditTitleButton ({ onClick }) {
-  const belowWidth = useMediaQuery('(max-width:700px)');
+  const belowWidth = useMediaQuery('(max-width:680px)');
   return (
     <Button
       onClick={onClick}

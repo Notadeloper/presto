@@ -95,8 +95,8 @@ export function AddVideoModal ({ onSubmit, onClose }) {
             }
           />
           <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button type="submit">Upload</Button>
-            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" sx={{ color: 'black' }}>Upload</Button>
+            <Button onClick={handleClose} sx={{ color: 'black' }}>Cancel</Button>
           </Box>
         </Box>
       </Modal>

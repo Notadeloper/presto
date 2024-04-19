@@ -4,7 +4,7 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export function NewSlideButton ({ onClick, presentationId }) {
-  const belowWidth = useMediaQuery('(max-width:700px)');
+  const belowWidth = useMediaQuery('(max-width:680px)');
   return (
     <Button
       onClick={() => onClick(presentationId)}

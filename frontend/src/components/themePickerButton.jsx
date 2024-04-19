@@ -4,7 +4,7 @@ import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export function ThemePickerButton ({ onClick }) {
-  const belowWidth = useMediaQuery('(max-width:700px)');
+  const belowWidth = useMediaQuery('(max-width:680px)');
   return (
     <Button
       onClick={onClick}

@@ -181,3 +181,12 @@ export const previewFlexContainer = {
   height: '100vh',
   padding: '0px',
 }
+
+export const presentationTitleStyle = {
+  flexGrow: 1,
+  fontWeight: 'bold',
+  fontFamily: 'Arial, sans-serif',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+}

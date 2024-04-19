@@ -24,7 +24,7 @@ export function ErrorDeleteSlideModal ({ onSubmit, onClose, presentationId }) {
         </Typography>
         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
           <Button type="submit" variant="contained" color="error">Delete Presentation</Button>
-          <Button onClick={handleClose}>Close Error</Button>
+          <Button onClick={handleClose} sx={{ color: 'black' }}>Close Error</Button>
         </Box>
       </Box>
     </Modal>

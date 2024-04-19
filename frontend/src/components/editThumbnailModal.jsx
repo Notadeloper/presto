@@ -51,8 +51,8 @@ export function EditThumbnailModal ({ onSubmit, onClose, presentationId }) {
             style={{ margin: '20px 0' }}
           />
           <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button type="submit">Save Changes</Button>
-            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" sx={{ color: 'black' }}>Save Changes</Button>
+            <Button onClick={handleClose} sx={{ color: 'black' }}>Cancel</Button>
           </Box>
         </Box>
       </Modal>

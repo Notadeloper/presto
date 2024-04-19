@@ -26,8 +26,8 @@ export function DeletePresentationModal ({ onSubmit, onClose, presentationId }) 
           Are you sure you want to delete this presentation? This action cannot be undone.
         </Typography>
         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <Button type="submit">Delete</Button>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit" sx={{ color: 'black' }}>Delete</Button>
+          <Button onClick={handleClose} sx={{ color: 'black' }}>Cancel</Button>
         </Box>
       </Box>
     </Modal>

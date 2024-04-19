@@ -4,7 +4,7 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export function SlideRearrangeButton ({ onClick }) {
-  const belowWidth = useMediaQuery('(max-width:700px)');
+  const belowWidth = useMediaQuery('(max-width:680px)');
   return (
     <Button
       onClick={onClick}
