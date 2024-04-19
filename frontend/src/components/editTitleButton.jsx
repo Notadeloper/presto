@@ -4,7 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 export function EditTitleButton ({ onClick }) {
   return (
-    <Button onClick={onClick} variant="contained" endIcon={<EditIcon />} aria-label="edit title">
+    <Button onClick={onClick} variant="contained" endIcon={<EditIcon />} aria-label="edit title" size='small'>
       Edit Title
     </Button>
   )

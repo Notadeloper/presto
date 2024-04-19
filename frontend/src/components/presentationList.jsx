@@ -31,7 +31,7 @@ export function PresentationList ({ presentations }) {
                   width: 'auto',
                   height: '100px',
                   marginBottom: '10px',
-                  backgroundColor: presentation.thumbnail ? 'transparent' : 'grey',
+                  backgroundColor: presentation.thumbnail ? 'transparent' : '#ececec',
                   display: 'block'
                 }}
               />

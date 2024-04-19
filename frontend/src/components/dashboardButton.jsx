@@ -10,7 +10,7 @@ export function DashboardButton ({ token, setToken }) {
     navigate('/dashboard'); // Navigate to the dashboard route
   };
   return (
-    <Button onClick={goToDashboard} variant="contained" endIcon={<HomeIcon />} aria-label="dashboard">
+    <Button onClick={goToDashboard} variant="contained" endIcon={<HomeIcon />} aria-label="dashboard" color="primary">
       Return to Dashboard
     </Button>
   );

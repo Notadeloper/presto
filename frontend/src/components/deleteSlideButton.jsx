@@ -4,7 +4,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 
 export function DeleteSlideButton ({ onClick }) {
   return (
-    <Button onClick={onClick} variant="contained" color="error" endIcon={<RemoveIcon />} aria-label="delete slide">
+    <Button onClick={onClick} variant="contained" color="error" endIcon={<RemoveIcon />} aria-label="delete slide" size='small'>
       Delete Slide
     </Button>
   );

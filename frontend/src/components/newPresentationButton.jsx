@@ -1,10 +1,10 @@
 import React from 'react';
-import Button from '@mui/material/Button';
+import { Button, Box } from '@mui/material';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 
 export function NewPresentationButton ({ onClick }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0 20px 0' }}>
+    <Box style={{ display: 'flex', justifyContent: 'center', margin: '20px 0 20px 0' }}>
       <Button
         onClick={onClick}
         variant="contained"
@@ -15,6 +15,6 @@ export function NewPresentationButton ({ onClick }) {
       >
         New Presentation
       </Button>
-    </div>
+    </Box>
   )
 }

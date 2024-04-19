@@ -4,7 +4,7 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 
 export function SlideRearrangeButton ({ onClick }) {
   return (
-    <Button onClick={onClick} variant="contained" endIcon={<SwapHorizIcon />} aria-label="slide rearranger button">
+    <Button onClick={onClick} variant="contained" endIcon={<SwapHorizIcon />} aria-label="slide rearranger button" size='small'>
       Rearrange Slides
     </Button>
   );

@@ -27,15 +27,31 @@ const theme = createTheme({
 export default theme;
 
 export const appBarStyle = {
-  color: 'primary',
+  backgroundColor: theme.palette.tertiary.main,
   position: 'static',
   height: '70px',
-  marginBottom: '20px',
 };
 
 export const toolBarStyle = {
   height: '70px',
 };
+
+export const toolBoxStyle = {
+  padding: '0 0 10px 20px',
+}
+
+export const buttonBoxStyle = {
+  border: '1px solid',
+  borderColor: 'divider',
+  borderRadius: '4px',
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  margin: '20px 0',
+  boxShadow: theme.shadows[2],
+  padding: theme.spacing(2),
+}
 
 export const divWrapperStyle = {
   display: 'flex',
