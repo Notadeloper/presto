@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Slide } from '@mui/material';
+import { Slide, AppBar, Toolbar, Typography } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { LogoutButton } from '../components/logoutButton.jsx';
 import { DashboardButton } from '../components/dashboardButton.jsx';
@@ -23,6 +23,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ThemePickerButton } from '../components/themePickerButton.jsx';
 import { ThemePickerModal } from '../components/themePickerModal.jsx';
 import { SlideRearrangeButton } from '../components/slideRearrangeButton.jsx';
+import { appBarStyle, toolBarStyle } from '../styles/style';
 
 export function Presentation ({ token, setTokenFunction }) {
   const { presentationId, urlSlideIndex } = useParams();
@@ -417,7 +418,13 @@ export function Presentation ({ token, setTokenFunction }) {
 
   return (
     <>
-      <h1>{presentation.title}</h1>
+      <AppBar sx={appBarStyle}>
+        <Toolbar sx={toolBarStyle}>
+          <Typography variant="h4" component="div" sx={{ flexGrow: 1, fontWeight: 'bold', fontFamily: 'Arial, sans-serif' }}>
+          {presentation.title}
+          </Typography>
+        </Toolbar>
+      </AppBar>
       <LogoutButton token={token} setToken={setTokenFunction}/>
       <DashboardButton/>
       <DeletePresentationButton onClick={toggleModalDeletePres}/>

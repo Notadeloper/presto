@@ -30,6 +30,7 @@ export const appBarStyle = {
   color: 'primary',
   position: 'static',
   height: '70px',
+  marginBottom: '20px',
 };
 
 export const toolBarStyle = {
