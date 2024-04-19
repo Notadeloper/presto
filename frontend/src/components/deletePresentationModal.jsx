@@ -20,7 +20,7 @@ export function DeletePresentationModal ({ onSubmit, onClose, presentationId }) 
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={handleClose} sx={{ zIndex: 1000002 }}>
       <Box sx={modalStyle} component="form" onSubmit={handleSubmit}>
         <Typography id="modal-title" variant="h6" component="h2">
           Are you sure you want to delete this presentation? This action cannot be undone.

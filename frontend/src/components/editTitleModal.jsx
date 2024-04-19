@@ -18,7 +18,7 @@ export function EditTitleModal ({ onSubmit, onClose, presentationId, currentPres
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={handleClose} sx={{ zIndex: 1000002 }}>
       <Box sx={modalStyle} component="form" onSubmit={handleSubmit} role="form">
         <Typography id="modal-title" variant="h6" component="h2">
           Enter New Presentation Title

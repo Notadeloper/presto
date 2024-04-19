@@ -11,7 +11,7 @@ export function ErrorModal ({ onClose, errorText }) {
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={handleClose} sx={{ zIndex: 1000002 }}>
       <Box sx={errorModalStyle} onSubmit={handleClose}>
         <Typography id="modal-title" variant="body1" component="h2">
           {errorText}

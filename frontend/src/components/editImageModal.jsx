@@ -50,7 +50,7 @@ export function EditImageModal ({ onSubmit, onClose, index }) {
 
   return (
     <>
-      <Modal open={open} onClose={handleClose} aria-labelledby="modal-title">
+      <Modal open={open} onClose={handleClose} aria-labelledby="modal-title" sx={{ zIndex: 1000002 }}>
         <Box sx={modalStyle} component="form" onSubmit={handleSubmit}>
           <Typography id="modal-title" variant="h6" component="h2">
             Edit Image Description

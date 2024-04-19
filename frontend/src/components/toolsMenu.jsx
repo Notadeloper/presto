@@ -12,6 +12,7 @@ import TextFieldsIcon from '@mui/icons-material/TextFields';
 import ImageIcon from '@mui/icons-material/Image';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import CodeIcon from '@mui/icons-material/Code';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { AddTextModal } from '../components/addTextModal.jsx';
 import { AddCodeModal } from '../components/addCodeModal.jsx';
 import { AddVideoModal } from '../components/addVideoModal.jsx';
@@ -28,6 +29,7 @@ export function ToolsMenu ({ slide, setSlide }) {
     video: false,
     code: false
   });
+  const belowWidth = useMediaQuery('(max-width:600px)');
 
   const toggleModalError = () => {
     setIsModalErrorVisible(!isModalErrorVisible);
@@ -42,13 +44,13 @@ export function ToolsMenu ({ slide, setSlide }) {
   };
 
   const ToolboxList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleToolbox(false)}>
+    <Box sx={{ width: belowWidth ? 200 : 250 }} role="presentation" onClick={toggleToolbox(false)}>
       <List>
         {[
-          { text: 'Add Text', icon: <TextFieldsIcon />, tool: 'Text' },
-          { text: 'Add Image', icon: <ImageIcon />, tool: 'Image' },
-          { text: 'Add Video', icon: <OndemandVideoIcon />, tool: 'Video' },
-          { text: 'Add Code', icon: <CodeIcon />, tool: 'Code' }
+          { text: 'Add Text Box', icon: <TextFieldsIcon />, tool: 'Text' },
+          { text: 'Upload Image', icon: <ImageIcon />, tool: 'Image' },
+          { text: 'Upload Video', icon: <OndemandVideoIcon />, tool: 'Video' },
+          { text: 'Add Code Box', icon: <CodeIcon />, tool: 'Code' }
         ].map((item) => (
           <ListItem key={item.text} disablePadding>
             <ListItemButton onClick={() => toggleModal(item.tool.toLowerCase())}>

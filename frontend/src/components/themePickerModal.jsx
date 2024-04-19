@@ -20,7 +20,7 @@ export function ThemePickerModal ({ onSubmit, onClose }) {
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={handleClose} sx={{ zIndex: 1000002 }}>
       <Box sx={modalStyle} component="form" onSubmit={handleSubmit}>
         <Typography id="modal-title" variant="h6" component="h2">
           Choose Background Colors

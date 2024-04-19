@@ -98,11 +98,22 @@ export const modalStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: '80%', // default width
+  height: '80%',
+  maxWidth: '500px', // max width of the modal
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
+  overflowY: 'auto', // Adds vertical scrollbar if needed
+  '&::-webkit-scrollbar': {
+    '-webkit-appearance': 'none',
+    width: '5px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: 'grey',
+    borderRadius: '10px',
+  },
 };
 
 export const errorModalStyle = {
