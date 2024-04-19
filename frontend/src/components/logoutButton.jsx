@@ -10,7 +10,7 @@ export function LogoutButton ({ token, setToken }) {
   const navigate = useNavigate();
   const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
   const [errorText, setErrorText] = React.useState('');
-  const belowWidth = useMediaQuery('(max-width:600px)');
+  const belowWidth = useMediaQuery('(max-width:700px)');
 
   const toggleModalError = () => {
     setIsModalErrorVisible(!isModalErrorVisible);
