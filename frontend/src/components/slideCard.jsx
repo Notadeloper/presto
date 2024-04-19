@@ -31,6 +31,7 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
   const [activeOverlay, setActiveOverlay] = React.useState(null);
   const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
   const [errorText, setErrorText] = React.useState('');
+  const [initialPosition, setInitialPosition] = React.useState({ x: 0, y: 0 });
 
   const token = localStorage.getItem('token');
   const presentationId = localStorage.getItem('currentPresentationId');
@@ -50,14 +51,53 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
     updateElementContent(index, slide, newValue);
   };
 
+  const updatePositionBackend = async (moveXPercentage, moveYPercentage, index) => {
+    try {
+      const response = await axios.get('http://localhost:5005/store', {
+        headers: {
+          Authorization: token,
+        }
+      });
+      const currentStore = response.data.store;
+      const currentPresentation = currentStore.presentations[presentationId];
+      const currentSlide = currentPresentation.slides.find(s => s.id === slide.id);
+      const newXPosition = currentSlide.elements[index].position.x + moveXPercentage;
+      const newYPosition = currentSlide.elements[index].position.y + moveYPercentage;
+      const clampedNewXPos = Math.max(0, Math.min(100, newXPosition));
+      const clampedNewYPos = Math.max(0, Math.min(100, newYPosition));
+      currentSlide.elements[index].position.x = clampedNewXPos;
+      currentSlide.elements[index].position.y = clampedNewYPos;
+
+      console.log(currentSlide);
+      await axios.put('http://localhost:5005/store', { store: currentStore }, {
+        headers: {
+          Authorization: token,
+        }
+      });
+    } catch (err) {
+      setErrorText(err.response.data.error);
+      toggleModalError(!isModalErrorVisible);
+    }
+  };
+
+  const handleDragStart = (e, data) => {
+    setInitialPosition({ x: data.x, y: data.y });
+  };
+
+  const handleDragStop = (e, data, index) => {
+    const moveX = data.x - initialPosition.x;
+    const moveY = data.y - initialPosition.y;
+    const moveXPercentage = (moveX / cardContentSize.width) * 100;
+    const moveYPercentage = (moveY / cardContentSize.height) * 100;
+    updatePositionBackend(moveXPercentage, moveYPercentage, index);
+  };
+
   const toggleDraggable = (index) => {
-    console.log(draggable[index]);
     if (!dragEnabled) return;
 
     setDraggable((prevDraggable) =>
       prevDraggable.map((isDraggable, i) => (i === index ? !isDraggable : isDraggable))
     );
-    console.log(draggable[index]);
   };
 
   const handleMouseEnter = (index) => {
@@ -268,8 +308,8 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
                 <div
                   style={{
                     position: 'absolute',
-                    top: `${slideElement.position.y}%`,
-                    left: `${slideElement.position.x}%`,
+                    top: `${(cardContentSize.height * slideElement.position.y / 100)}px`,
+                    left: `${(cardContentSize.width * slideElement.position.x / 100)}px`,
                     height: `${(cardContentSize.height * slideElement.size.height) / 100}px`,
                     width: `${(cardContentSize.width * slideElement.size.width) / 100}px`,
                     zIndex: index,
@@ -314,8 +354,8 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
                   onClick={() => toggleDraggable(index)}
                   style={{
                     position: 'absolute',
-                    top: `${slideElement.position.y}%`,
-                    left: `${slideElement.position.x}%`,
+                    top: `${(cardContentSize.height * slideElement.position.y / 100)}px`,
+                    left: `${(cardContentSize.width * slideElement.position.x / 100)}px`,
                     height: `${(cardContentSize.height * slideElement.size.height) / 100}px`,
                     width: `${(cardContentSize.width * slideElement.size.width) / 100}px`,
                     zIndex: index
@@ -351,8 +391,8 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
                 <div
                   style={{
                     position: 'absolute',
-                    top: `${slideElement.position.y}%`,
-                    left: `${slideElement.position.x}%`,
+                    top: `${(cardContentSize.height * slideElement.position.y / 100)}px`,
+                    left: `${(cardContentSize.width * slideElement.position.x / 100)}px`,
                     height: `${(cardContentSize.height * slideElement.size.height) / 100}px`,
                     width: `${(cardContentSize.width * slideElement.size.width) / 100}px`,
                     zIndex: index,
@@ -385,8 +425,8 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
                 <div
                   style={{
                     position: 'absolute',
-                    top: `${slideElement.position.y}%`,
-                    left: `${slideElement.position.x}%`,
+                    top: `${(cardContentSize.height * slideElement.position.y / 100)}px`,
+                    left: `${(cardContentSize.width * slideElement.position.x / 100)}px`,
                     height: `${(cardContentSize.height * slideElement.size.height) / 100}px`,
                     width: `${(cardContentSize.width * slideElement.size.width) / 100}px`,
                     zIndex: index,
@@ -435,10 +475,10 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
             let bounds = { left: 0, top: 0, right: 0, bottom: 0 };
             if (cardContentRef.current && cardContentSize && slideElement) {
               bounds = {
-                left: 0,
-                top: 0,
-                right: cardContentRef.current.offsetWidth - (cardContentSize.width * (slideElement.size.width / 100)),
-                bottom: cardContentRef.current.offsetHeight - (cardContentSize.height * (slideElement.size.height / 100))
+                left: -cardContentSize.width * (slideElement.position.x / 100),
+                top: -cardContentSize.height * (slideElement.position.y / 100),
+                right: cardContentRef.current.offsetWidth - (cardContentSize.width * ((slideElement.size.width / 100) + (slideElement.position.x / 100))),
+                bottom: cardContentRef.current.offsetHeight - (cardContentSize.height * ((slideElement.size.height / 100) + (slideElement.position.y / 100)))
               };
             }
             return (
@@ -446,6 +486,8 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
                 key={index}
                 disabled={!draggable[index]}
                 bounds={bounds}
+                onStart={handleDragStart}
+                onStop={(e, data) => handleDragStop(e, data, index)}
               >
                 <div
                   onDoubleClick={() => toggleDraggable(index)}
