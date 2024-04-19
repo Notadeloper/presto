@@ -436,7 +436,11 @@ export function Presentation ({ token, setTokenFunction }) {
         justifyContent: 'center',
         my: 4
       }}>
-        {Number(slideIndex) > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
+        {
+          Number(slideIndex) > 0
+            ? <SlideLeftButton onClick={doSlideLeft}/>
+            : <div style={{ width: '24px', height: '64px', backgroundColor: 'transparent' }}></div>
+        }
         {notStartedNavigation
           ? (<SlideCard slide={slide} setSlide={setSlide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} defaultBackgroundColor={presentation.defaultBgColor} />)
           : (
@@ -446,7 +450,11 @@ export function Presentation ({ token, setTokenFunction }) {
             </div>
           </Slide>
             )}
-        {Number(slideIndex) < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}
+        {
+          Number(slideIndex) < presentation.slides.length - 1
+            ? <SlideRightButton onClick={doSlideRight}/>
+            : <div style={{ width: '24px', height: '64px', backgroundColor: 'transparent' }}></div>
+        }
       </Box>
       {isModalDeletePresVisible && <DeletePresentationModal onSubmit={deletePresentation} onClose={toggleModalDeletePres} presentationId={presentationId} />}
       {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} currentPresentationTitle={presentation.title} />}
