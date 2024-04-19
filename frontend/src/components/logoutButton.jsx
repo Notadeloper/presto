@@ -10,7 +10,7 @@ export function LogoutButton ({ token, setToken }) {
   const navigate = useNavigate();
   const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
   const [errorText, setErrorText] = React.useState('');
-  const matches = useMediaQuery('(max-width:600px)');
+  const belowWidth = useMediaQuery('(max-width:600px)');
 
   const toggleModalError = () => {
     setIsModalErrorVisible(!isModalErrorVisible);
@@ -35,10 +35,20 @@ export function LogoutButton ({ token, setToken }) {
 
   return (
     <>
-      <Button onClick={logout} variant="contained" color="error" endIcon={<LogoutIcon />} aria-label="logout">
-        {matches ? '' : 'Logout'}
+      <Button
+        onClick={logout}
+        variant="contained"
+        color="error"
+        style={{
+          minWidth: belowWidth ? '48px' : '',
+          padding: belowWidth ? '6px' : '',
+        }}
+        aria-label="logout"
+      >
+        {!belowWidth && 'Logout'}
+        <LogoutIcon style={{ marginLeft: belowWidth ? 0 : '10px' }} />
       </Button>
-      {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
+      {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText} />}
     </>
   );
 }

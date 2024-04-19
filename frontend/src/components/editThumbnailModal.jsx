@@ -39,7 +39,7 @@ export function EditThumbnailModal ({ onSubmit, onClose, presentationId }) {
 
   return (
     <>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose} sx={{ zIndex: 1000002 }}>
         <Box sx={modalStyle} component="form" onSubmit={handleSubmit}>
           <Typography id="modal-thumbnail" variant="h6" component="h2">
             Enter New Presentation Thumbnail

@@ -17,7 +17,7 @@ export function ErrorDeleteSlideModal ({ onSubmit, onClose, presentationId }) {
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={handleClose} sx={{ zIndex: 1000002 }}>
       <Box sx={errorModalStyle} component="form" onSubmit={handleSubmit}>
         <Typography id="modal-title" variant="body1" component="h2">
           This is the last slide left in the presentation! Delete presentation instead?
