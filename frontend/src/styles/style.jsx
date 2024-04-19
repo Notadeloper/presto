@@ -118,7 +118,7 @@ export const slideCardStyle = {
 
 export const slideCardPreviewStyle = {
   width: 'calc(100vw - 48px)',
-  height: 'calc(100vh - 36.5px)',
+  height: 'calc((100vw - 48px) / 2)',
   margin: '0px',
   padding: '0px'
 };

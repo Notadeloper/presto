@@ -6,10 +6,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 export function ThemePickerButton ({ onClick }) {
   const belowWidth = useMediaQuery('(max-width:680px)');
   return (
-<<<<<<< HEAD
-    <Button onClick={onClick} variant="contained" endIcon={<FormatColorFillIcon />} aria-label="theme picker" size='small' color='quaternary'>
-      Theme Picker
-=======
     <Button
       onClick={onClick}
       variant="contained"
@@ -19,7 +15,6 @@ export function ThemePickerButton ({ onClick }) {
       size='small'
     >
       {!belowWidth ? 'Theme Picker' : <FormatColorFillIcon />}
->>>>>>> c988d5960f25e02c6d9eb5b29218c9fabaf58cbf
     </Button>
   );
 }

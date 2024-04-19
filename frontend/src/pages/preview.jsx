@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Slide, Box } from '@mui/material';
+import { Slide, AppBar, Toolbar, Typography, Box } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { LogoutButton } from '../components/logoutButton.jsx';
 import { SlideCardPreview } from '../components/slideCardPreview';
@@ -8,6 +8,7 @@ import { SlideLeftButton } from '../components/slideLeftButton.jsx';
 import { SlideRightButton } from '../components/slideRightButton.jsx';
 import { ErrorModal } from '../components/errorModal.jsx';
 import { previewFlexContainer } from '../styles/style.jsx';
+import { appBarStyle, toolBarStyle, presentationTitleStyle } from '../styles/style';
 
 export function Preview ({ token, setTokenFunction }) {
   const { presentationId, urlSlideIndex } = useParams();
@@ -129,28 +130,35 @@ export function Preview ({ token, setTokenFunction }) {
   }
 
   return (
-    <Box sx={previewFlexContainer}>
-      <Box sx={{ position: 'absolute', top: 0, right: 24 }}>
-        <LogoutButton token={token} setToken={setTokenFunction}/>
+    <>
+      <AppBar sx={appBarStyle}>
+        <Toolbar sx={toolBarStyle}>
+          <Typography variant="h5" component="div" sx={presentationTitleStyle}>
+            {presentation.title}
+          </Typography>
+          <LogoutButton token={token} setToken={setTokenFunction}/>
+        </Toolbar>
+      </AppBar>
+      <Box sx={previewFlexContainer}>
+        <Box sx={{ position: 'absolute', top: '30px' }}>
+          {notStartedNavigation
+            ? (<SlideCardPreview slide={slide} slideIndex={slideIndex} defaultBackgroundColor={presentation.defaultBgColor}/>)
+            : (
+            <Slide in={inProp} direction={direction}>
+              <div>
+                <SlideCardPreview slide={slide} slideIndex={slideIndex} defaultBackgroundColor={presentation.defaultBgColor}/>
+              </div>
+            </Slide>
+              )}
+        </Box>
+        <Box sx={{ position: 'absolute', left: 0, top: '38vh' }}>
+          {slideIndex > 0 && <SlideLeftButton onClick={doSlideLeft} />}
+        </Box>
+        <Box sx={{ position: 'absolute', right: 0, top: '38vh' }}>
+          {slideIndex < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}
+        </Box>
+        {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
       </Box>
-      <Box sx={{ position: 'absolute', bottom: 0 }}>
-        {notStartedNavigation
-          ? (<SlideCardPreview slide={slide} slideIndex={slideIndex} defaultBackgroundColor={presentation.defaultBgColor}/>)
-          : (
-          <Slide in={inProp} direction={direction}>
-            <div>
-              <SlideCardPreview slide={slide} slideIndex={slideIndex} defaultBackgroundColor={presentation.defaultBgColor}/>
-            </div>
-          </Slide>
-            )}
-      </Box>
-      <Box sx={{ position: 'absolute', left: 0 }}>
-        {slideIndex > 0 && <SlideLeftButton onClick={doSlideLeft} />}
-      </Box>
-      <Box sx={{ position: 'absolute', right: 0 }}>
-        {slideIndex < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}
-      </Box>
-      {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
-    </Box>
+    </>
   );
 }

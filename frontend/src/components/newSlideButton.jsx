@@ -6,10 +6,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 export function NewSlideButton ({ onClick, presentationId }) {
   const belowWidth = useMediaQuery('(max-width:680px)');
   return (
-<<<<<<< HEAD
-    <Button onClick={() => onClick(presentationId)} variant="contained" endIcon={<NoteAddIcon />} aria-label="new slide" size='small' color='quaternary'>
-      New Slide
-=======
     <Button
       onClick={() => onClick(presentationId)}
       variant="contained"
@@ -19,7 +15,6 @@ export function NewSlideButton ({ onClick, presentationId }) {
       size='small'
     >
       {!belowWidth ? 'New Slide' : <NoteAddIcon />}
->>>>>>> c988d5960f25e02c6d9eb5b29218c9fabaf58cbf
     </Button>
   )
 }
