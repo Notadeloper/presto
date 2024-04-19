@@ -421,6 +421,11 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
                 </div>
               );
             } else if (slideElement.elementType === 'video') {
+              let iframeSrc = slideElement.videoUrl;
+              if (slideElement.videoAutoplay) {
+                const queryParams = 'autoplay=1&mute=1';
+                iframeSrc += (slideElement.videoUrl.includes('?') ? '&' : '?') + queryParams;
+              }
               elementContent = (
                 <div
                   style={{
@@ -435,8 +440,7 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
                   onMouseLeave={handleMouseLeave}
                 >
                   <iframe
-                    src={slideElement.videoUrl}
-                    autoPlay={slideElement.videoAutoplay}
+                    src={iframeSrc}
                     height={`${(cardContentSize.height * slideElement.size.height) / 100}px`}
                     width={`${(cardContentSize.width * slideElement.size.width) / 100}px`}
                     onContextMenu={(event) => handleRightClick(event, index, slide)}
@@ -453,7 +457,7 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
                     <div
                       style={{
                         position: 'absolute',
-                        bottom: 0,
+                        top: '20%',
                         width: '100%',
                         height: '20%',
                         backgroundColor: 'rgba(0, 0, 0, 0.5)',

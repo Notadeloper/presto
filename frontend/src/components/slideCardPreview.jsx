@@ -36,8 +36,8 @@ export function SlideCardPreview ({ slide, slideIndex, defaultBackgroundColor })
                 readOnly
                 style={{
                   position: 'absolute',
-                  top: `${slideElement.textPosition.y}%`,
-                  left: `${slideElement.textPosition.x}%`,
+                  top: `${slideElement.position.y}%`,
+                  left: `${slideElement.position.x}%`,
                   height: `${slideElement.size.height}%`,
                   width: `${slideElement.size.width}%`,
                   fontSize: `${slideElement.fontSize}em`,
@@ -61,8 +61,8 @@ export function SlideCardPreview ({ slide, slideIndex, defaultBackgroundColor })
                 key={index}
                 style={{
                   position: 'absolute',
-                  top: `${slideElement.codePosition.y}%`,
-                  left: `${slideElement.codePosition.x}%`,
+                  top: `${slideElement.position.y}%`,
+                  left: `${slideElement.position.x}%`,
                   height: `${slideElement.size.height}%`,
                   width: `${slideElement.size.width}%`,
                   zIndex: index
@@ -83,6 +83,55 @@ export function SlideCardPreview ({ slide, slideIndex, defaultBackgroundColor })
                   }}
                   style={aceEditorStyle}
                 />
+              </div>
+            );
+          } else if (slideElement.elementType === 'image') {
+            return (
+              <div
+                key={index}
+                style={{
+                  position: 'absolute',
+                  top: `${slideElement.position.y}%`,
+                  left: `${slideElement.position.x}%`,
+                  height: `${slideElement.size.height}%`,
+                  width: `${slideElement.size.width}%`,
+                  zIndex: index
+                }}
+              >
+                <img
+                    draggable="false"
+                    src={slideElement.image}
+                    alt={slideElement.imageDescription}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                    }}
+                  />
+              </div>
+            );
+          } else if (slideElement.elementType === 'video') {
+            let iframeSrc = slideElement.videoUrl;
+            if (slideElement.videoAutoplay) {
+              const queryParams = 'autoplay=1&mute=1';
+              iframeSrc += (slideElement.videoUrl.includes('?') ? '&' : '?') + queryParams;
+            }
+            return (
+              <div
+                key={index}
+                style={{
+                  position: 'absolute',
+                  top: `${slideElement.position.y}%`,
+                  left: `${slideElement.position.x}%`,
+                  height: `${slideElement.size.height}%`,
+                  width: `${slideElement.size.width}%`,
+                  zIndex: index
+                }}
+              >
+                <iframe
+                    src={iframeSrc}
+                    height={`${slideElement.size.height}%`}
+                    width={`${slideElement.size.width}%`}
+                  />
               </div>
             );
           }
