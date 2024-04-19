@@ -50,7 +50,7 @@ export function AddTextModal ({ onSubmit, onClose }) {
 
   return (
     <>
-      <Modal open={open} onClose={handleClose} aria-labelledby="modal-title" sx={{ zIndex: 1000002 }}>
+      <Modal open={open} onClose={handleClose} aria-labelledby="modal-title">
         <Box sx={modalStyle} component="form" onSubmit={handleSubmit}>
           <Typography id="modal-title" variant="h6" component="h2">
             Create New Text Box

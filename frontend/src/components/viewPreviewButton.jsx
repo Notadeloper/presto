@@ -4,7 +4,7 @@ import SlideshowIcon from '@mui/icons-material/Slideshow';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export function ViewPreviewButton ({ onClick }) {
-  const belowWidth = useMediaQuery('(max-width:700px)');
+  const belowWidth = useMediaQuery('(max-width:680px)');
   return (
     <Button
       onClick={onClick}

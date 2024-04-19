@@ -23,7 +23,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ThemePickerButton } from '../components/themePickerButton.jsx';
 import { ThemePickerModal } from '../components/themePickerModal.jsx';
 import { SlideRearrangeButton } from '../components/slideRearrangeButton.jsx';
-import { appBarStyle, toolBarStyle, toolBoxStyle, buttonBoxStyle } from '../styles/style';
+import { appBarStyle, toolBarStyle, toolBoxStyle, buttonBoxStyle, presentationTitleStyle } from '../styles/style';
 
 export function Presentation ({ token, setTokenFunction }) {
   const { presentationId, urlSlideIndex } = useParams();
@@ -404,7 +404,7 @@ export function Presentation ({ token, setTokenFunction }) {
     <>
       <AppBar sx={appBarStyle}>
         <Toolbar sx={toolBarStyle}>
-          <Typography variant="h4" component="div" sx={{ flexGrow: 1, fontWeight: 'bold', fontFamily: 'Arial, sans-serif' }}>
+          <Typography variant="h5" component="div" sx={presentationTitleStyle}>
             {presentation.title}
           </Typography>
           <DashboardButton/>
