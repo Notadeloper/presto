@@ -24,6 +24,7 @@ export function PresentationList ({ presentations }) {
         <Card key={presentation.id} sx={presentationCardStyle}>
           <CardActionArea sx={{ height: '100%' }} onClick={() => handlePresentationClick(presentation.id)}>
             <CardContent sx={{ flexGrow: 1 }}>
+<<<<<<< HEAD
             {presentation.thumbnail
               ? (
                 <img
@@ -48,6 +49,19 @@ export function PresentationList ({ presentations }) {
                   }}
                 />
                 )}
+=======
+              <img
+                src={presentation.thumbnail}
+                alt={presentation.title}
+                style={{
+                  width: 'auto',
+                  height: '100px',
+                  marginBottom: '10px',
+                  backgroundColor: presentation.thumbnail ? 'transparent' : '#ececec',
+                  display: 'block'
+                }}
+              />
+>>>>>>> felix/style
               <Typography variant="h5" component="div" sx={{ wordWrap: 'break-word' }}>
                 {presentation.title}
               </Typography>

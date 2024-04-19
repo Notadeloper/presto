@@ -18,6 +18,7 @@ import { AddCodeModal } from '../components/addCodeModal.jsx';
 import { AddVideoModal } from '../components/addVideoModal.jsx';
 import { AddImageModal } from '../components/addImageModal.jsx';
 import { ErrorModal } from '../components/errorModal.jsx';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 export function ToolsMenu ({ slide, setSlide }) {
   const [open, setOpen] = React.useState(false);
@@ -95,7 +96,7 @@ export function ToolsMenu ({ slide, setSlide }) {
   }
   return (
     <div>
-      <Button onClick={toggleToolbox(true)} aria-label="open toolbox">Open Toolbox</Button>
+      <Button onClick={toggleToolbox(true)} aria-label="open toolbox" sx={{ color: 'black' }} endIcon={<KeyboardArrowRightIcon />}>Open Toolbox</Button>
       <Drawer open={open} onClose={toggleToolbox(false)} sx={{ zIndex: 100001 }}>
         {ToolboxList}
       </Drawer>

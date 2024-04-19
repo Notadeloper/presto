@@ -1,10 +1,10 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import EditIcon from '@mui/icons-material/Edit';
+import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 
 export function EditThumbnailButton ({ onClick }) {
   return (
-    <Button onClick={onClick} variant="contained" endIcon={<EditIcon />} aria-label="edit thumbnail">
+    <Button onClick={onClick} variant="contained" endIcon={<PhotoLibraryIcon />} aria-label="edit thumbnail" size='small'>
       Edit Thumbnail
     </Button>
   )

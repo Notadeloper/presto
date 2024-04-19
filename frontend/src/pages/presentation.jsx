@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Slide, AppBar, Toolbar, Typography } from '@mui/material';
+import { Slide, AppBar, Toolbar, Typography, Box } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { LogoutButton } from '../components/logoutButton.jsx';
 import { DashboardButton } from '../components/dashboardButton.jsx';
@@ -23,7 +23,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ThemePickerButton } from '../components/themePickerButton.jsx';
 import { ThemePickerModal } from '../components/themePickerModal.jsx';
 import { SlideRearrangeButton } from '../components/slideRearrangeButton.jsx';
-import { appBarStyle, toolBarStyle } from '../styles/style';
+import { appBarStyle, toolBarStyle, toolBoxStyle, buttonBoxStyle } from '../styles/style';
 
 export function Presentation ({ token, setTokenFunction }) {
   const { presentationId, urlSlideIndex } = useParams();
@@ -405,21 +405,31 @@ export function Presentation ({ token, setTokenFunction }) {
       <AppBar sx={appBarStyle}>
         <Toolbar sx={toolBarStyle}>
           <Typography variant="h4" component="div" sx={{ flexGrow: 1, fontWeight: 'bold', fontFamily: 'Arial, sans-serif' }}>
-          {presentation.title}
+            {presentation.title}
           </Typography>
+          <DashboardButton/>
+          <LogoutButton token={token} setToken={setTokenFunction}/>
         </Toolbar>
       </AppBar>
-      <LogoutButton token={token} setToken={setTokenFunction}/>
-      <DashboardButton/>
-      <DeletePresentationButton onClick={toggleModalDeletePres}/>
-      <DeleteSlideButton onClick={deleteSlide}/>
-      <EditTitleButton onClick={toggleModalEditTitle}/>
-      <EditThumbnailButton onClick={toggleModalEditThumbnail}/>
-      <NewSlideButton onClick={createNewSlide} presentationId={presentationId}/>
-      <ViewPreviewButton onClick={openPreview}/>
-      <ThemePickerButton onClick={toggleModalThemePicker}/>
-      <SlideRearrangeButton onClick={openRearrange}/>
-      <ToolsMenu slide={slide} setSlide={setSlide}/>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
+        <Box sx={buttonBoxStyle}>
+          <DeletePresentationButton onClick={toggleModalDeletePres}/>
+          <DeleteSlideButton onClick={deleteSlide}/>
+        </Box>
+        <Box sx={buttonBoxStyle}>
+          <EditTitleButton onClick={toggleModalEditTitle}/>
+          <EditThumbnailButton onClick={toggleModalEditThumbnail}/>
+        </Box>
+        <Box sx={buttonBoxStyle}>
+          <NewSlideButton onClick={createNewSlide} presentationId={presentationId}/>
+          <ViewPreviewButton onClick={openPreview}/>
+          <ThemePickerButton onClick={toggleModalThemePicker}/>
+          <SlideRearrangeButton onClick={openRearrange}/>
+        </Box>
+      </Toolbar>
+      <Box sx={toolBoxStyle}>
+        <ToolsMenu slide={slide} setSlide={setSlide}/>
+      </Box>
       {notStartedNavigation
         ? (<SlideCard slide={slide} setSlide={setSlide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} defaultBackgroundColor={presentation.defaultBgColor} />)
         : (
