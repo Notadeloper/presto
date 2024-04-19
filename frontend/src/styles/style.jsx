@@ -41,16 +41,14 @@ export const toolBoxStyle = {
 }
 
 export const buttonBoxStyle = {
-  border: '1px solid',
   borderColor: 'divider',
-  borderRadius: '4px',
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
   margin: '20px 0',
   boxShadow: theme.shadows[2],
-  padding: theme.spacing(2),
+  padding: '0px',
 }
 
 export const divWrapperStyle = {
@@ -113,7 +111,7 @@ export const slideRearrangeCardStyle = {
 
 export const slideCardStyle = {
   width: 'calc(100vw - 50px)',
-  height: 'calc(100vh / 2)',
+  height: 'calc((100vw - 50px) / 2)',
   margin: 'auto',
   padding: '0px'
 };
@@ -130,14 +128,14 @@ export const modalStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80%', // default width
+  width: '80%',
   height: '80%',
-  maxWidth: '500px', // max width of the modal
+  maxWidth: '500px',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  overflowY: 'auto', // Adds vertical scrollbar if needed
+  overflowY: 'auto',
   '&::-webkit-scrollbar': {
     '-webkit-appearance': 'none',
     width: '5px',

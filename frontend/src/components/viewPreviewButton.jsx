@@ -1,11 +1,20 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export function ViewPreviewButton ({ onClick }) {
+  const belowWidth = useMediaQuery('(max-width:700px)');
   return (
-    <Button onClick={onClick} variant="contained" endIcon={<SlideshowIcon />} aria-label="view preview" size='small' color='quaternary'>
-      View Preview
+    <Button
+      onClick={onClick}
+      variant="contained"
+      endIcon={!belowWidth ? <SlideshowIcon /> : null}
+      style={{ padding: belowWidth ? '6px' : '' }}
+      aria-label="view preview"
+      size='small'
+    >
+      {!belowWidth ? 'View Preview' : <SlideshowIcon />}
     </Button>
   );
 }
