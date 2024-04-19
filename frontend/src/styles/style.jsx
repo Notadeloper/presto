@@ -4,27 +4,38 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#fcd5ce',
+      main: '#fcd5ce', // pink orange
     },
     secondary: {
-      main: '#ffcad4',
+      main: '#ffcad4', // darker pink
     },
     tertiary: {
-      main: '#fadde1',
+      main: '#fadde1', // lighter pink
     },
     quaternary: {
-      main: '#eadbdd',
+      main: '#eadbdd', // grey purple
     },
     error: {
-      main: '#f69697',
+      main: '#f69697', // soft red
     },
     background: {
-      default: '#f6eee9',
+      default: '#f6eee9', // light beige
     },
   },
 });
 
 export default theme;
+
+export const appBarStyle = {
+  color: 'primary',
+  position: 'static',
+  height: '70px',
+  marginBottom: '20px',
+};
+
+export const toolBarStyle = {
+  height: '70px',
+};
 
 export const divWrapperStyle = {
   display: 'flex',
