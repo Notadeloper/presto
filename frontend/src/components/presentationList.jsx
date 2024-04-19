@@ -31,7 +31,7 @@ export function PresentationList ({ presentations }) {
                   alt={presentation.title}
                   style={{
                     width: 'auto',
-                    height: '100px',
+                    height: '80px',
                     marginBottom: '10px',
                     display: 'block'
                   }}
@@ -41,9 +41,9 @@ export function PresentationList ({ presentations }) {
                 <div
                   style={{
                     width: 'auto',
-                    height: '100px',
+                    height: '80px',
                     marginBottom: '10px',
-                    backgroundColor: 'grey',
+                    backgroundColor: '#D3D3D3',
                     display: 'block'
                   }}
                 />
@@ -52,7 +52,10 @@ export function PresentationList ({ presentations }) {
                 {presentation.title}
               </Typography>
               <Typography variant="body2">
-                Slides: {presentation.slides.length}
+                Description: {presentation.description}
+              </Typography>
+              <Typography variant="body2">
+                Number of slides: {presentation.slides.length}
               </Typography>
             </CardContent>
           </CardActionArea>

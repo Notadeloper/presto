@@ -4,11 +4,13 @@ import Button from '@mui/material/Button';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import { ErrorModal } from '../components/errorModal.jsx';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export function LogoutButton ({ token, setToken }) {
   const navigate = useNavigate();
   const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
   const [errorText, setErrorText] = React.useState('');
+  const matches = useMediaQuery('(max-width:600px)');
 
   const toggleModalError = () => {
     setIsModalErrorVisible(!isModalErrorVisible);
@@ -34,7 +36,7 @@ export function LogoutButton ({ token, setToken }) {
   return (
     <>
       <Button onClick={logout} variant="contained" color="error" endIcon={<LogoutIcon />} aria-label="logout">
-        Logout
+        {matches ? '' : 'Logout'}
       </Button>
       {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
     </>
