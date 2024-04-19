@@ -53,14 +53,14 @@ export const flexContainerStyle = {
   display: 'flex',
   flexDirection: 'row',
   flexWrap: 'wrap',
-  justifyContent: 'flex-between',
-  alignItems: 'center',
+  justifyContent: 'space-between',
+  alignItems: 'stretch',
   rowGap: '10px',
 };
 
 export const presentationCardStyle = {
-  flex: '0 1 450px',
-  minWidth: '100px',
+  flex: '1',
+  minWidth: '300px',
   margin: '8px',
   borderRadius: '10px',
   aspectRatio: '2 / 1',

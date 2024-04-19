@@ -16,6 +16,7 @@ export function Dashboard ({ token, setTokenFunction }) {
   const [presentations, setPresentations] = React.useState([]);
   const [isModalErrorVisible, setIsModalErrorVisible] = React.useState(false);
   const [errorText, setErrorText] = React.useState('');
+
   if (token === null) {
     navigate('/login');
   }
@@ -81,7 +82,7 @@ export function Dashboard ({ token, setTokenFunction }) {
       id: uuidv4(),
       title: presentationTitle,
       thumbnail: null,
-      description: null,
+      description: '',
       defaultBgColor: null,
       slides: [
         {
