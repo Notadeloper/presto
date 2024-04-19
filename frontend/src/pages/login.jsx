@@ -70,7 +70,7 @@ export function Login ({ token, setTokenFunction }) {
         <Button variant="contained" color="primary" type="submit" sx={{ mt: 3 }} aria-label="login">
           Log In
         </Button>
-        <Button variant="contained" color="secondary" type="button" onClick={navigateToRegister} sx={{ mt: 3 }}>
+        <Button variant="contained" color="secondary" type="button" data-testid="register-button" onClick={navigateToRegister} sx={{ mt: 3 }}>
           Need an account? Register
         </Button>
       </Box>
