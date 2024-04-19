@@ -4,6 +4,7 @@ import { modalStyle } from '../styles/style.jsx';
 import { ErrorModal } from '../components/errorModal.jsx';
 
 export function EditTextModal ({ onSubmit, onClose, index }) {
+  const [textSize, setTextSize] = React.useState({ height: '', width: '' });
   const [textColor, setTextColor] = React.useState('');
   const [fontSize, setFontSize] = React.useState('');
   const [fontFamily, setFontFamily] = React.useState('sans-serif');
@@ -28,12 +29,13 @@ export function EditTextModal ({ onSubmit, onClose, index }) {
     e.preventDefault(); // Stops default submitting of form
     const editTextElement = {
       elementType: 'text',
+      size: textSize,
       fontSize,
       fontFamily,
       textColor,
       elementContent,
     };
-    if (Number(fontSize) > 0 && isValidHexColor(textColor)) {
+    if (Number(textSize.width) > 1 && Number(textSize.height) > 1 && Number(fontSize) > 0 && isValidHexColor(textColor)) {
       onSubmit(editTextElement, index);
       handleClose();
     } else {
@@ -49,6 +51,30 @@ export function EditTextModal ({ onSubmit, onClose, index }) {
           <Typography id="modal-title" variant="h6" component="h2">
             Edit Text Box
           </Typography>
+          <TextField
+            fullWidth
+            margin="normal"
+            id="text-size-height"
+            label="Text Area Height (%)"
+            type="number"
+            onChange={(e) => setTextSize({ ...textSize, height: e.target.value })}
+            variant="outlined"
+            InputProps={{ endAdornment: '%', inputProps: { min: 1, max: 100 } }}
+            helperText="Enter a value from 1 to 100, where 100 is the full height to resize the text box."
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            id="text-size-width"
+            label="Text Area Width (%)"
+            type="number"
+            onChange={(e) => setTextSize({ ...textSize, width: e.target.value })}
+            variant="outlined"
+            InputProps={{ endAdornment: '%', inputProps: { min: 1, max: 100 } }}
+            helperText="Enter a value from 1 to 100, where 100 is the full width to resize the text box."
+            required
+          />
           <TextField
             fullWidth
             margin="normal"

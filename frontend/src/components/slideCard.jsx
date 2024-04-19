@@ -16,6 +16,7 @@ import { EditVideoModal } from './editVideoModal.jsx'
 import { EditTextModal } from '../components/editTextModal.jsx';
 import { ErrorModal } from '../components/errorModal.jsx';
 import { CornerBox } from './cornerBox.jsx';
+import 'react-resizable/css/styles.css';
 
 export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateElementContent, defaultBackgroundColor }) {
   const [backgroundColor, setBackgroundColor] = React.useState('ffffff');
@@ -206,6 +207,7 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
       const currentPresentations = currentStore.presentations;
       const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
       const currentElement = currentSlide.elements[index];
+      currentElement.size = newElementInfo.size;
       currentElement.elementContent = newElementInfo.elementContent;
       currentElement.fontFamily = newElementInfo.fontFamily;
       currentElement.fontSize = newElementInfo.fontSize;
@@ -233,6 +235,7 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
       const currentPresentations = currentStore.presentations;
       const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
       const currentElement = currentSlide.elements[index];
+      currentElement.size = newElementInfo.size;
       currentElement.image = newElementInfo.image;
       currentElement.imageDescription = newElementInfo.imageDescription;
       await axios.put('http://localhost:5005/store', { store: currentStore }, {
@@ -258,6 +261,7 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
       const currentPresentations = currentStore.presentations;
       const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
       const currentElement = currentSlide.elements[index];
+      currentElement.size = newElementInfo.size;
       currentElement.videoUrl = newElementInfo.videoUrl;
       currentElement.videoAutoplay = newElementInfo.videoAutoplay;
       await axios.put('http://localhost:5005/store', { store: currentStore }, {
@@ -283,6 +287,7 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
       const currentPresentations = currentStore.presentations;
       const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
       const currentElement = currentSlide.elements[index];
+      currentElement.size = newElementInfo.size;
       currentElement.elementContent = newElementInfo.elementContent;
       currentElement.fontSize = newElementInfo.fontSize;
       await axios.put('http://localhost:5005/store', { store: currentStore }, {
@@ -338,9 +343,9 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
                   {draggable[index] && (
                     <>
                       <CornerBox style={{ top: '-2.5px', left: '-2.5px' }} />
-                      <CornerBox style={{ top: '-2.5px', right: '-2.5px' }} />
-                      <CornerBox style={{ bottom: '-2.5px', left: '-2.5px' }} />
-                      <CornerBox style={{ bottom: '-2.5px', right: '-2.5px' }} />
+                      <CornerBox style={{ top: '-2.5px', right: '-7.5px' }} />
+                      <CornerBox style={{ bottom: '-7.5px', left: '-2.5px' }} />
+                      <CornerBox style={{ bottom: '-7.5px', right: '-7.5px' }} />
                     </>
                   )}
                 </div>

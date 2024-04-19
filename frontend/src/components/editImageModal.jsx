@@ -5,6 +5,7 @@ import { fileToDataUrl } from '../helpers';
 import { ErrorModal } from '../components/errorModal.jsx';
 
 export function EditImageModal ({ onSubmit, onClose, index }) {
+  const [imageSize, setImageSize] = React.useState({ height: '', width: '' });
   const [imageDescription, setImageDescription] = React.useState('');
   const [imageFile, setImageFile] = React.useState(null);
   const [open, setOpen] = React.useState(true);
@@ -30,12 +31,17 @@ export function EditImageModal ({ onSubmit, onClose, index }) {
       const image = await fileToDataUrl(imageFile);
       const editImageElement = {
         elementType: 'image',
+        size: imageSize,
         image,
         imageDescription,
       };
-      console.log(image);
-      onSubmit(editImageElement, index);
-      handleClose();
+      if (Number(imageSize.width) > 1 && Number(imageSize.height) > 1) {
+        onSubmit(editImageElement, index);
+        handleClose();
+      } else {
+        setErrorText('Please enter valid image dimensions.');
+        toggleModalError(!isModalErrorVisible);
+      }
     } catch (err) {
       setErrorText(err.data.response.error);
       toggleModalError(!isModalErrorVisible);
@@ -49,6 +55,30 @@ export function EditImageModal ({ onSubmit, onClose, index }) {
           <Typography id="modal-title" variant="h6" component="h2">
             Edit Image Description
           </Typography>
+          <TextField
+            fullWidth
+            margin="normal"
+            id="image-size-height"
+            label="Image Area Height (%)"
+            type="number"
+            onChange={(e) => setImageSize({ ...imageSize, height: e.target.value })}
+            variant="outlined"
+            InputProps={{ endAdornment: '%', inputProps: { min: 1, max: 100 } }}
+            helperText="Enter a value from 1 to 100, where 100 is the full height to resize the image."
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            id="image-size-width"
+            label="Image Area Width (%)"
+            type="number"
+            onChange={(e) => setImageSize({ ...imageSize, width: e.target.value })}
+            variant="outlined"
+            InputProps={{ endAdornment: '%', inputProps: { min: 1, max: 100 } }}
+            helperText="Enter a value from 1 to 100, where 100 is the full width to resize the image."
+            required
+          />
           <TextField
             fullWidth
             margin="normal"
