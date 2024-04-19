@@ -1,7 +1,41 @@
 // This file is for MUI Styles
+import { createTheme } from '@mui/material/styles';
 
-export const thisIsADivWrapperStyle = {
-  backgroundColor: 'red'
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#fcd5ce',
+    },
+    secondary: {
+      main: '#ffcad4',
+    },
+    tertiary: {
+      main: '#fadde1',
+    },
+    quaternary: {
+      main: '#eadbdd',
+    },
+    error: {
+      main: '#f69697',
+    },
+    background: {
+      default: '#f6eee9',
+    },
+  },
+});
+
+export default theme;
+
+export const divWrapperStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  backgroundColor: theme.palette.quaternary.main,
+  borderRadius: '10px',
+  padding: theme.spacing(3),
+  boxShadow: theme.shadows[3],
+  maxWidth: 400,
+  mx: 'auto',
+  my: theme.spacing(5),
 };
 
 export const flexContainerStyle = {
