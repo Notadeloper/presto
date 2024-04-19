@@ -7,6 +7,8 @@ import { NewPresentationModal } from '../components/newPresentationModal';
 import { PresentationList } from '../components/presentationList';
 import { ErrorModal } from '../components/errorModal.jsx';
 import { v4 as uuidv4 } from 'uuid';
+import { AppBar, Toolbar, Typography } from '@mui/material';
+import { appBarStyle, toolBarStyle } from '../styles/style';
 
 export function Dashboard ({ token, setTokenFunction }) {
   const navigate = useNavigate();
@@ -116,9 +118,15 @@ export function Dashboard ({ token, setTokenFunction }) {
   };
 
   return <>
-    <h1>Dashboard</h1>
-    <LogoutButton token={token} setToken={setTokenFunction}/> <br />
-    <NewPresentationButton onClick={toggleModal} />
+    <AppBar sx={appBarStyle}>
+      <Toolbar sx={toolBarStyle}>
+        <Typography variant="h4" component="div" sx={{ flexGrow: 1, fontWeight: 'bold', fontFamily: 'Arial, sans-serif' }}>
+          Dashboard
+        </Typography>
+        <LogoutButton token={token} setToken={setTokenFunction}/>
+      </Toolbar>
+    </AppBar>
+    <NewPresentationButton onClick={toggleModal}/>
     {isModalVisible && <NewPresentationModal onSubmit={addNewPresentation} onClose={toggleModal} />}
     <PresentationList presentations={presentations} />
     {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
