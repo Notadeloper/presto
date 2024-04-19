@@ -28,7 +28,7 @@ export function EditCodeModal ({ onSubmit, onClose, index }) {
       fontSize,
       elementContent,
     };
-    if (Number(fontSize) > 0) {
+    if (Number(codeSize.width) > 1 && Number(codeSize.height) > 1 && Number(fontSize) > 0) {
       onSubmit(editCodeElement, index);
       handleClose();
     } else {
@@ -53,8 +53,8 @@ export function EditCodeModal ({ onSubmit, onClose, index }) {
             value={codeSize.height}
             onChange={(e) => setCodeSize({ ...codeSize, height: e.target.value })}
             variant="outlined"
-            InputProps={{ endAdornment: '%', inputProps: { min: 0, max: 100 } }}
-            helperText="Enter a value from 1 to 100, where 100 is the full height to resize the box."
+            InputProps={{ endAdornment: '%', inputProps: { min: 1, max: 100 } }}
+            helperText="Enter a value from 1 to 100, where 100 is the full height to resize the code box."
             required
           />
           <TextField
@@ -66,8 +66,8 @@ export function EditCodeModal ({ onSubmit, onClose, index }) {
             value={codeSize.width}
             onChange={(e) => setCodeSize({ ...codeSize, width: e.target.value })}
             variant="outlined"
-            InputProps={{ endAdornment: '%', inputProps: { min: 0, max: 100 } }}
-            helperText="Enter a value from 1 to 100, where 100 is the full height to resize the box."
+            InputProps={{ endAdornment: '%', inputProps: { min: 1, max: 100 } }}
+            helperText="Enter a value from 1 to 100, where 100 is the full height to resize the code box."
             required
           />
           <TextField

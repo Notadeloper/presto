@@ -207,6 +207,7 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
       const currentPresentations = currentStore.presentations;
       const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
       const currentElement = currentSlide.elements[index];
+      currentElement.size = newElementInfo.size;
       currentElement.elementContent = newElementInfo.elementContent;
       currentElement.fontFamily = newElementInfo.fontFamily;
       currentElement.fontSize = newElementInfo.fontSize;
@@ -234,6 +235,7 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
       const currentPresentations = currentStore.presentations;
       const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
       const currentElement = currentSlide.elements[index];
+      currentElement.size = newElementInfo.size;
       currentElement.image = newElementInfo.image;
       currentElement.imageDescription = newElementInfo.imageDescription;
       await axios.put('http://localhost:5005/store', { store: currentStore }, {
@@ -259,6 +261,7 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
       const currentPresentations = currentStore.presentations;
       const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
       const currentElement = currentSlide.elements[index];
+      currentElement.size = newElementInfo.size;
       currentElement.videoUrl = newElementInfo.videoUrl;
       currentElement.videoAutoplay = newElementInfo.videoAutoplay;
       await axios.put('http://localhost:5005/store', { store: currentStore }, {
@@ -284,6 +287,7 @@ export function SlideCard ({ slide, setSlide, slideIndex, deleteElement, updateE
       const currentPresentations = currentStore.presentations;
       const currentSlide = currentPresentations[presentationId].slides.find(s => s.id === slide.id);
       const currentElement = currentSlide.elements[index];
+      currentElement.size = newElementInfo.size;
       currentElement.elementContent = newElementInfo.elementContent;
       currentElement.fontSize = newElementInfo.fontSize;
       await axios.put('http://localhost:5005/store', { store: currentStore }, {

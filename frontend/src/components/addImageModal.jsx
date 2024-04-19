@@ -68,7 +68,7 @@ export function AddImageModal ({ onSubmit, onClose }) {
             onChange={(e) => setImageSize({ ...imageSize, height: e.target.value })}
             variant="outlined"
             InputProps={{ endAdornment: '%', inputProps: { min: 0, max: 100 } }}
-            helperText="Enter a value from 0 to 100, where 100 is the full width."
+            helperText="Enter a value from 0 to 100, where 100 is the full height."
             required
           />
           <TextField
