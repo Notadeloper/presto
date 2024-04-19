@@ -17,7 +17,7 @@ export function ErrorModal ({ onClose, errorText }) {
           {errorText}
         </Typography>
         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <Button onClick={handleClose}>Close Error</Button>
+          <Button onClick={handleClose} sx={{ color: '#957dad' }}>Close Error</Button>
         </Box>
       </Box>
     </Modal>

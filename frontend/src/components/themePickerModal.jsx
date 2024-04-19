@@ -30,8 +30,8 @@ export function ThemePickerModal ({ onSubmit, onClose }) {
         <Typography variant="subtitle1" sx={{ mt: 2, mb: 2 }}>Choose default slide background:</Typography>
         <HexColorPicker color={defaultBackground} onChange={setDefaultBackground} />
         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <Button type="submit" sx={{ color: 'black' }}>Save Changes</Button>
-          <Button onClick={handleClose} sx={{ color: 'black' }}>Cancel</Button>
+          <Button type="submit" sx={{ color: '#957dad' }}>Save Changes</Button>
+          <Button onClick={handleClose} sx={{ color: '#957dad' }}>Cancel</Button>
         </Box>
       </Box>
     </Modal>

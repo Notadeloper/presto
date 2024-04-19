@@ -96,8 +96,8 @@ export function EditCodeModal ({ onSubmit, onClose, index }) {
             required
           />
           <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button type="submit" sx={{ color: 'black' }}>Edit</Button>
-            <Button onClick={handleClose} sx={{ color: 'black' }}>Cancel</Button>
+            <Button type="submit" sx={{ color: '#957dad' }}>Edit</Button>
+            <Button onClick={handleClose} sx={{ color: '#957dad' }}>Cancel</Button>
           </Box>
         </Box>
       </Modal>

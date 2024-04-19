@@ -63,6 +63,16 @@ export const divWrapperStyle = {
   my: theme.spacing(5),
 };
 
+export const listItemButtonStyle = {
+  '&:hover': {
+    bgcolor: 'action.hover',
+    '.MuiListItemIcon-root': {
+      color: '#957dad',
+    }
+  },
+  transition: 'background-color 0.3s',
+};
+
 export const flexContainerStyle = {
   display: 'flex',
   flexDirection: 'row',
@@ -70,6 +80,12 @@ export const flexContainerStyle = {
   justifyContent: 'space-between',
   alignItems: 'stretch',
   rowGap: '10px',
+  padding: '50px',
+  backgroundColor: '#f5f5f5',
+  border: '1px solid #e0e0e0',
+  borderRadius: '8px',
+  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  margin: '20px 20px 20px 20px',
 };
 
 export const presentationCardStyle = {

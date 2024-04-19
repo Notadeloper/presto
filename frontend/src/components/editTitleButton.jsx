@@ -6,6 +6,10 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 export function EditTitleButton ({ onClick }) {
   const belowWidth = useMediaQuery('(max-width:680px)');
   return (
+<<<<<<< HEAD
+    <Button onClick={onClick} variant="contained" endIcon={<EditIcon />} aria-label="edit title" size='small' color='secondary'>
+      Edit Title
+=======
     <Button
       onClick={onClick}
       variant="contained"
@@ -15,6 +19,7 @@ export function EditTitleButton ({ onClick }) {
       size='small'
     >
       {!belowWidth ? 'Edit Title' : <EditIcon />}
+>>>>>>> c988d5960f25e02c6d9eb5b29218c9fabaf58cbf
     </Button>
   )
 }

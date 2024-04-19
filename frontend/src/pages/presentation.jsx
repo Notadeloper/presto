@@ -430,20 +430,27 @@ export function Presentation ({ token, setTokenFunction }) {
       <Box sx={toolBoxStyle}>
         <ToolsMenu slide={slide} setSlide={setSlide}/>
       </Box>
-      {notStartedNavigation
-        ? (<SlideCard slide={slide} setSlide={setSlide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} defaultBackgroundColor={presentation.defaultBgColor} />)
-        : (
-        <Slide in={inProp} direction={direction}>
-          <div>
-          <SlideCard slide={slide} setSlide={setSlide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} defaultBackgroundColor={presentation.defaultBgColor} />
-          </div>
-        </Slide>
-          )}
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        my: 4
+      }}>
+        {Number(slideIndex) > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
+        {notStartedNavigation
+          ? (<SlideCard slide={slide} setSlide={setSlide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} defaultBackgroundColor={presentation.defaultBgColor} />)
+          : (
+          <Slide in={inProp} direction={direction}>
+            <div>
+            <SlideCard slide={slide} setSlide={setSlide} slideIndex={slideIndex} deleteElement={deleteElement} updateElementContent={updateElementContent} defaultBackgroundColor={presentation.defaultBgColor} />
+            </div>
+          </Slide>
+            )}
+        {Number(slideIndex) < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}
+      </Box>
       {isModalDeletePresVisible && <DeletePresentationModal onSubmit={deletePresentation} onClose={toggleModalDeletePres} presentationId={presentationId} />}
       {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} currentPresentationTitle={presentation.title} />}
       {isModalEditThumbnailVisible && <EditThumbnailModal onSubmit={editPresentationThumbnail} onClose={toggleModalEditThumbnail} presentationId={presentationId} />}
-      {Number(slideIndex) > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
-      {Number(slideIndex) < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}
       {isModalThemePickerVisible && <ThemePickerModal onSubmit={updateBackgroundColour} onClose={toggleModalThemePicker}/>}
       {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
       {isModalErrorDeleteSlideVisible && <ErrorDeleteSlideModal onSubmit={deletePresentation} onClose={toggleModalErrorDeleteSlide} presentationId={presentationId} />}
