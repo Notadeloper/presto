@@ -59,6 +59,7 @@ export function Register ({ token, setTokenFunction }) {
           fullWidth
           margin="normal"
           label="Email Address"
+          name="register-email"
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
@@ -68,6 +69,7 @@ export function Register ({ token, setTokenFunction }) {
         <TextField
           fullWidth
           margin="normal"
+          name="register-password"
           label="Password"
           type="password"
           value={password}
@@ -78,6 +80,7 @@ export function Register ({ token, setTokenFunction }) {
         <TextField
           fullWidth
           margin="normal"
+          name="confirm-register-password"
           label="Confirm Password"
           type="password"
           value={confirmPassword}
@@ -88,6 +91,7 @@ export function Register ({ token, setTokenFunction }) {
         <TextField
           fullWidth
           margin="normal"
+          name="user-name"
           label="Name"
           type="text"
           value={name}

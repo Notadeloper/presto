@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from './pages/login.jsx';
 import { Register } from './pages/register.jsx';
 import { Dashboard } from './pages/dashboard.jsx';
@@ -29,6 +29,7 @@ function App () {
       <DndProvider backend={HTML5Backend}>
         <BrowserRouter>
           <Routes>
+            <Route path="/" element={<Navigate replace to="/register" />} />
             <Route path="/register" element={<Register token={token} setTokenFunction={setTokenAbstract}/>} />
             <Route path="/login" element={<Login token={token} setTokenFunction={setTokenAbstract}/>} />
             <Route path="/dashboard" element={<Dashboard token={token} setTokenFunction={setTokenAbstract}/>} />

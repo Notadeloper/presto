@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { NewSlideButton } from '../components/newSlideButton';
 
-
 describe('NewSlideButton', () =>  {
     it('renders the button', () => {
         render(<NewSlideButton onClick={() => {}} presentationId="123" />);
