@@ -423,7 +423,7 @@ export function Presentation ({ token, setTokenFunction }) {
         </Slide>
           )}
       {isModalDeletePresVisible && <DeletePresentationModal onSubmit={deletePresentation} onClose={toggleModalDeletePres} presentationId={presentationId} />}
-      {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} />}
+      {isModalEditTitleVisible && <EditTitleModal onSubmit={editPresentationTitle} onClose={toggleModalEditTitle} presentationId={presentationId} currentPresentationTitle={presentation.title} />}
       {isModalEditThumbnailVisible && <EditThumbnailModal onSubmit={editPresentationThumbnail} onClose={toggleModalEditThumbnail} presentationId={presentationId} />}
       {Number(slideIndex) > 0 && <SlideLeftButton onClick={doSlideLeft}/>}
       {Number(slideIndex) < presentation.slides.length - 1 && <SlideRightButton onClick={doSlideRight}/>}

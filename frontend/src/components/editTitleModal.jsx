@@ -2,8 +2,8 @@ import React from 'react';
 import { Button, TextField, Box, Typography, Modal } from '@mui/material';
 import { modalStyle } from '../styles/style.jsx';
 
-export function EditTitleModal ({ onSubmit, onClose, presentationId }) {
-  const [presentationTitle, setPresentationTitle] = React.useState('');
+export function EditTitleModal ({ onSubmit, onClose, presentationId, currentPresentationTitle }) {
+  const [presentationTitle, setPresentationTitle] = React.useState(currentPresentationTitle);
   const [open, setOpen] = React.useState(true);
 
   const handleClose = () => {
