@@ -413,17 +413,17 @@ export function Presentation ({ token, setTokenFunction }) {
       </AppBar>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
         <Box sx={buttonBoxStyle}>
+          <EditTitleButton onClick={toggleModalEditTitle}/>
+          <EditThumbnailButton onClick={toggleModalEditThumbnail}/>
           <DeletePresentationButton onClick={toggleModalDeletePres}/>
           <DeleteSlideButton onClick={deleteSlide}/>
         </Box>
-        <Box sx={buttonBoxStyle}>
-          <EditTitleButton onClick={toggleModalEditTitle}/>
-          <EditThumbnailButton onClick={toggleModalEditThumbnail}/>
-        </Box>
+      </Toolbar>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
         <Box sx={buttonBoxStyle}>
           <NewSlideButton onClick={createNewSlide} presentationId={presentationId}/>
-          <ViewPreviewButton onClick={openPreview}/>
           <ThemePickerButton onClick={toggleModalThemePicker}/>
+          <ViewPreviewButton onClick={openPreview}/>
           <SlideRearrangeButton onClick={openRearrange}/>
         </Box>
       </Toolbar>
