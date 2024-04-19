@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { useNavigate, Navigate } from 'react-router-dom';
+import { Button, TextField, Box, Typography } from '@mui/material';
+import { divWrapperStyle } from '../styles/style';
 import { ErrorModal } from '../components/errorModal.jsx';
 
 export function Register ({ token, setTokenFunction }) {
@@ -46,17 +48,60 @@ export function Register ({ token, setTokenFunction }) {
 
   return (
     <>
-      <form onSubmit={(e) => {
+      <Box sx={divWrapperStyle} component="form" onSubmit={(e) => {
         e.preventDefault();
         register();
       }}>
-        Email: <input type="text" onChange={e => setEmail(e.target.value)} value = {email} /> <br />
-        Password: <input type="password" onChange={e => setPassword(e.target.value)} value = {password} /> <br />
-        Confirm Password: <input type="password" onChange={e => setConfirmPassword(e.target.value)} value = {confirmPassword} /> <br/>
-        Name: <input type="text" onChange={e => setName(e.target.value)} value = {name} /> <br />
-        <button type ="submit" aria-label="register">Register</button>
-        <button type ="button" onClick={navigateToLogin}>Already have an account? Log In</button>
-      </form>
+        <Typography variant="h5" textAlign="center" component="h1" marginBottom={2}>
+          Register
+        </Typography>
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Email Address"
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          variant="outlined"
+          required
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Password"
+          type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          variant="outlined"
+          required
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Confirm Password"
+          type="password"
+          value={confirmPassword}
+          onChange={e => setConfirmPassword(e.target.value)}
+          variant="outlined"
+          required
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Name"
+          type="text"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          variant="outlined"
+          required
+        />
+        <Button variant="contained" color="primary" type="submit" sx={{ mt: 3 }} aria-label="register">
+          Register
+        </Button>
+        <Button variant="contained" color="secondary" type="button" onClick={navigateToLogin} sx={{ mt: 3 }}>
+          Already have an account? Log In
+        </Button>
+      </Box>
       {isModalErrorVisible && <ErrorModal onClose={toggleModalError} errorText={errorText}/>}
     </>
   );

@@ -8,6 +8,8 @@ import { Preview } from './pages/preview.jsx';
 import { Rearranger } from './pages/rearranger.jsx';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import theme from './styles/style.jsx';
 
 function App () {
   let lsToken = null;
@@ -22,7 +24,8 @@ function App () {
   }
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <DndProvider backend={HTML5Backend}>
         <BrowserRouter>
           <Routes>
@@ -35,7 +38,7 @@ function App () {
           </Routes>
         </BrowserRouter>
       </DndProvider>
-    </>
+    </ThemeProvider>
   );
 }
 

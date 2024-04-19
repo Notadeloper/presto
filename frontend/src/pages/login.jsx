@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Box, Typography } from '@mui/material';
-import { thisIsADivWrapperStyle } from '../styles/style';
+import { divWrapperStyle } from '../styles/style';
 import { ErrorModal } from '../components/errorModal.jsx';
 
 export function Login ({ token, setTokenFunction }) {
@@ -40,11 +40,11 @@ export function Login ({ token, setTokenFunction }) {
 
   return (
     <>
-      <Box sx={thisIsADivWrapperStyle} component="form" onSubmit={(e) => {
+      <Box sx={divWrapperStyle} component="form" onSubmit={(e) => {
         e.preventDefault();
         login();
       }}>
-        <Typography variant="h6" component="h1" marginBottom={2}>
+        <Typography variant="h5" textAlign="center" component="h1" marginBottom={2}>
           Login
         </Typography>
         <TextField
@@ -68,9 +68,9 @@ export function Login ({ token, setTokenFunction }) {
           required
         />
         <Button variant="contained" color="primary" type="submit" sx={{ mt: 3 }} aria-label="login">
-          Submit
+          Log In
         </Button>
-        <Button variant="contained" color="primary" onClick={navigateToRegister} sx={{ mt: 3 }}>
+        <Button variant="contained" color="secondary" type="button" onClick={navigateToRegister} sx={{ mt: 3 }}>
           Need an account? Register
         </Button>
       </Box>
