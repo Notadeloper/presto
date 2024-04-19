@@ -4,6 +4,7 @@ import { modalStyle } from '../styles/style.jsx';
 import { ErrorModal } from '../components/errorModal.jsx';
 
 export function EditCodeModal ({ onSubmit, onClose, index }) {
+  const [codeSize, setCodeSize] = React.useState({ height: '', width: '' });
   const [fontSize, setFontSize] = React.useState('');
   const [elementContent, setElementContent] = React.useState('');
   const [open, setOpen] = React.useState(true);
@@ -20,9 +21,10 @@ export function EditCodeModal ({ onSubmit, onClose, index }) {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Stops default submitting of form
+    e.preventDefault();
     const editCodeElement = {
       elementType: 'code',
+      size: codeSize,
       fontSize,
       elementContent,
     };
@@ -42,6 +44,32 @@ export function EditCodeModal ({ onSubmit, onClose, index }) {
           <Typography id="modal-title" variant="h6" component="h2">
             Edit Code Box
           </Typography>
+          <TextField
+            fullWidth
+            margin="normal"
+            id="code-size-height"
+            label="Code Area Height (%)"
+            type="number"
+            value={codeSize.height}
+            onChange={(e) => setCodeSize({ ...codeSize, height: e.target.value })}
+            variant="outlined"
+            InputProps={{ endAdornment: '%', inputProps: { min: 0, max: 100 } }}
+            helperText="Enter a value from 1 to 100, where 100 is the full height to resize the box."
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            id="code-size-width"
+            label="Code Area Width (%)"
+            type="number"
+            value={codeSize.width}
+            onChange={(e) => setCodeSize({ ...codeSize, width: e.target.value })}
+            variant="outlined"
+            InputProps={{ endAdornment: '%', inputProps: { min: 0, max: 100 } }}
+            helperText="Enter a value from 1 to 100, where 100 is the full height to resize the box."
+            required
+          />
           <TextField
             fullWidth
             margin="normal"
