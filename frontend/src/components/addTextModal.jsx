@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TextField, Box, Typography, Modal } from '@mui/material';
+import { Button, TextField, Box, Typography, Modal, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { modalStyle } from '../styles/style.jsx';
 import { ErrorModal } from '../components/errorModal.jsx';
 
@@ -90,15 +90,20 @@ export function AddTextModal ({ onSubmit, onClose }) {
             InputProps={{ endAdornment: 'em' }}
             required
           />
-          <TextField
-            fullWidth
-            margin="normal"
-            id="font-size"
-            label="Font Family"
-            type="text"
-            onChange={(e) => setFontFamily(e.target.value)}
-            variant="outlined"
-          />
+          <FormControl fullWidth>
+            <InputLabel id="font-family-select-label">Font Family</InputLabel>
+            <Select
+              labelId="font-family-select-label"
+              id="font-family-select"
+              value={fontFamily}
+              label="Font Family"
+              onChange={(e) => setFontFamily(e.target.value)}
+            >
+              <MenuItem value="sans-serif">Sans-serif</MenuItem>
+              <MenuItem value="Arial">Arial</MenuItem>
+              <MenuItem value="Times New Roman">Times New Roman</MenuItem>
+            </Select>
+          </FormControl>
           <TextField
             fullWidth
             margin="normal"
